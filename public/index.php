@@ -53,8 +53,13 @@ if ($page === 'register') {
 
 } elseif ($page === 'profile') {
 
+    if (empty($_SESSION['usuario'])) {
+        header('Location: ' . BASE_URL . '/?page=login');
+        exit;
+    }
+
     $view = APP_PATH . '/views/auth/profile.php';
-    
+
 } else {
     $view = APP_PATH . '/views/home/index.php';
 }
