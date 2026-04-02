@@ -51,6 +51,10 @@ if ($page === 'register') {
 
     $view = APP_PATH . '/views/auth/login.php';
 
+} elseif ($page === 'profile') {
+
+    $view = APP_PATH . '/views/auth/profile.php';
+    
 } else {
     $view = APP_PATH . '/views/home/index.php';
 }
