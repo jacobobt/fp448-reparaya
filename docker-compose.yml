@@ -1,0 +1,10 @@
+services:
+  web:
+    image: php:8.2-apache
+    container_name: reparaya_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public:/var/www/html
+      - ./app:/var/www/app
+      - ./config:/var/www/config
