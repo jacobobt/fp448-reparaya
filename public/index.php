@@ -53,8 +53,37 @@ if ($page === 'register') {
 
 } elseif ($page === 'profile') {
 
+    if (empty($_SESSION['usuario'])) {
+        header('Location: ' . BASE_URL . '/?page=login');
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $nombre = trim($_POST['nombre']);
+        $email = trim($_POST['email']);
+        $telefono = trim($_POST['telefono']);
+
+        $actualizacionCorrecta = Usuario::actualizarPerfil(
+            $pdo,
+            $_SESSION['usuario']['id'],
+            $nombre,
+            $email,
+            $telefono
+        );
+
+        if ($actualizacionCorrecta) {
+            $_SESSION['usuario']['nombre'] = $nombre;
+            $_SESSION['usuario']['email'] = $email;
+            $_SESSION['usuario']['telefono'] = $telefono;
+
+            $mensaje = 'Perfil actualizado correctamente';
+        } else {
+            $mensaje = 'Error al actualizar el perfil';
+        }
+    }
+
     $view = APP_PATH . '/views/auth/profile.php';
-    
+
 } else {
     $view = APP_PATH . '/views/home/index.php';
 }
