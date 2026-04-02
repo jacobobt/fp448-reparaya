@@ -18,4 +18,16 @@ class Usuario
             ':telefono' => $telefono
         ]);
     }
+
+    public static function buscarPorEmail($pdo, $email)
+    {
+        $sql = "SELECT * FROM usuarios WHERE email = :email";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':email' => $email
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

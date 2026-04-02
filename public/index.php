@@ -24,6 +24,24 @@ if ($page === 'register') {
     }
 
     $view = APP_PATH . '/views/auth/register.php';
+
+} elseif ($page === 'login') {
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
+
+        $usuario = Usuario::buscarPorEmail($pdo, $email);
+
+        if ($usuario && password_verify($password, $usuario['password'])) {
+            $mensaje = 'Login correcto';
+        } else {
+            $mensaje = 'Email o contraseña incorrectos';
+        }
+    }
+
+    $view = APP_PATH . '/views/auth/login.php';
+
 } else {
     $view = APP_PATH . '/views/home/index.php';
 }

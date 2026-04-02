@@ -4,7 +4,7 @@
     <p><?php echo $mensaje; ?></p>
 <?php endif; ?>
 
-<form method="POST" action="">
+<form method="POST" action="<?php echo BASE_URL; ?>/?page=register">
     <div>
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre">
