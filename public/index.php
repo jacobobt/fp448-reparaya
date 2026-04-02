@@ -7,6 +7,11 @@ require_once '/var/www/config/database.php';
 require_once APP_PATH . '/models/Usuario.php';
 
 $page = $_GET['page'] ?? 'home';
+if ($page === 'logout') {
+    session_destroy();
+    header('Location: ' . BASE_URL);
+    exit;
+}
 $mensaje = '';
 
 if ($page === 'register') {
