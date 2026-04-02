@@ -8,3 +8,9 @@ $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <p>Total de especialidades en la base de datos: <?php echo $resultado['total']; ?></p>
+
+<?php if (!empty($_SESSION['usuario'])): ?>
+    <p>Usuario en sesión: <?php echo $_SESSION['usuario']['nombre']; ?></p>
+<?php else: ?>
+    <p>No hay usuario en sesión</p>
+<?php endif; ?>

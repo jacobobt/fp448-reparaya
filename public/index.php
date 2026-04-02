@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once '/var/www/config/config.php';
 require_once '/var/www/config/database.php';
 require_once APP_PATH . '/models/Usuario.php';
@@ -34,7 +36,9 @@ if ($page === 'register') {
         $usuario = Usuario::buscarPorEmail($pdo, $email);
 
         if ($usuario && password_verify($password, $usuario['password'])) {
-            $mensaje = 'Login correcto';
+            $_SESSION['usuario'] = $usuario;
+            header('Location: ' . BASE_URL);
+            exit;
         } else {
             $mensaje = 'Email o contraseña incorrectos';
         }
