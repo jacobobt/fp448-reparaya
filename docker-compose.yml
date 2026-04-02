@@ -8,3 +8,19 @@ services:
       - ./public:/var/www/html
       - ./app:/var/www/app
       - ./config:/var/www/config
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: reparaya_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reparaya
+      MYSQL_USER: reparaya_user
+      MYSQL_PASSWORD: reparaya_pass
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
