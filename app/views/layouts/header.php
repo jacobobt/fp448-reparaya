@@ -3,7 +3,7 @@
     <nav>
         <a href="<?php echo BASE_URL; ?>">Inicio</a> |
         <a href="#">Login</a> |
-        <a href="#">Registro</a>
+        <a href="<?php echo BASE_URL; ?>/?page=register">Registro</a>
     </nav>
     <hr>
 </header>
