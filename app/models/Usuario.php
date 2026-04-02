@@ -30,4 +30,20 @@ class Usuario
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public static function actualizarPerfil($pdo, $id, $nombre, $email, $telefono)
+    {
+        $sql = "UPDATE usuarios
+                SET nombre = :nombre, email = :email, telefono = :telefono
+                WHERE id = :id";
+
+        $stmt = $pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $id,
+            ':nombre' => $nombre,
+            ':email' => $email,
+            ':telefono' => $telefono
+        ]);
+    }
 }
