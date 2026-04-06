@@ -4,88 +4,28 @@ session_start();
 
 require_once '/var/www/config/config.php';
 require_once '/var/www/config/database.php';
-require_once APP_PATH . '/models/Usuario.php';
+
 
 $page = $_GET['page'] ?? 'home';
-if ($page === 'logout') {
-    session_destroy();
-    header('Location: ' . BASE_URL);
-    exit;
+switch ($page) {
+    case 'login':
+        require_once APP_PATH . '/controllers/AuthController.php';
+        (new AuthController($pdo))->login();
+        break;
+    case 'register':
+        require_once APP_PATH . '/controllers/AuthController.php';
+        (new AuthController($pdo))->register();
+        break;
+    case 'profile':
+        require_once APP_PATH . '/controllers/AuthController.php';
+        (new ProfileController($pdo))->show();
+        break;
+    case 'logout':
+        require_once APP_PATH . '/controllers/AuthController.php';
+        (new AuthController($pdo))->logout();
+        break;
+    default:
+        require_once APP_PATH . '/controllers/HomeController.php';
+        (new HomeController($pdo))->index();
+        break;
 }
-$mensaje = '';
-
-if ($page === 'register') {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nombre = trim($_POST['nombre']);
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
-        $telefono = trim($_POST['telefono']);
-
-        $registroCorrecto = Usuario::registrar($pdo, $nombre, $email, $password, $telefono);
-
-        if ($registroCorrecto) {
-            $mensaje = 'Usuario registrado correctamente';
-        } else {
-            $mensaje = 'Error al registrar el usuario';
-        }
-    }
-
-    $view = APP_PATH . '/views/auth/register.php';
-
-} elseif ($page === 'login') {
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
-
-        $usuario = Usuario::buscarPorEmail($pdo, $email);
-
-        if ($usuario && password_verify($password, $usuario['password'])) {
-            $_SESSION['usuario'] = $usuario;
-            header('Location: ' . BASE_URL);
-            exit;
-        } else {
-            $mensaje = 'Email o contraseña incorrectos';
-        }
-    }
-
-    $view = APP_PATH . '/views/auth/login.php';
-
-} elseif ($page === 'profile') {
-
-    if (empty($_SESSION['usuario'])) {
-        header('Location: ' . BASE_URL . '/?page=login');
-        exit;
-    }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nombre = trim($_POST['nombre']);
-        $email = trim($_POST['email']);
-        $telefono = trim($_POST['telefono']);
-
-        $actualizacionCorrecta = Usuario::actualizarPerfil(
-            $pdo,
-            $_SESSION['usuario']['id'],
-            $nombre,
-            $email,
-            $telefono
-        );
-
-        if ($actualizacionCorrecta) {
-            $_SESSION['usuario']['nombre'] = $nombre;
-            $_SESSION['usuario']['email'] = $email;
-            $_SESSION['usuario']['telefono'] = $telefono;
-
-            $mensaje = 'Perfil actualizado correctamente';
-        } else {
-            $mensaje = 'Error al actualizar el perfil';
-        }
-    }
-
-    $view = APP_PATH . '/views/auth/profile.php';
-
-} else {
-    $view = APP_PATH . '/views/home/index.php';
-}
-
-require_once APP_PATH . '/views/layouts/main.php';

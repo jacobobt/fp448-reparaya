@@ -46,4 +46,10 @@ class Usuario
             ':telefono' => $telefono
         ]);
     }
+    public static function obtenerTodos($pdo)
+    {
+        $stmt = $pdo->query("SELECT * FROM usuarios");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
