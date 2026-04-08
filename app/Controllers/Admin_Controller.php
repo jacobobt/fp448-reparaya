@@ -6,7 +6,7 @@ class AdminController {
     private $modelo;
 
     public function __construct($pdo) {
-        // CORRECCIÓN: eliminado el require_once duplicado que causaba "class already declared"
+        
         $this->modelo = new Admin_modelo($pdo);
     }
 

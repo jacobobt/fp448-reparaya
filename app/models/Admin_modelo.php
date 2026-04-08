@@ -51,24 +51,27 @@ class Admin_modelo {
     }
 
     public function guardarIncidencia($datos) {
-        // Localizador único tipo REP-2026-AB3F
-        $localizador = 'REP-' . date('y') . '-' . strtoupper(substr(uniqid(), -4));
+    // 1. Usamos 'y' minúscula para que el año ocupe solo 2 dígitos (evita el error de "Data too long")
+    $localizador = 'REP-' . date('y') . '-' . strtoupper(substr(uniqid(), -4));
+    
 
-        $sql = "INSERT INTO incidencias
-                    (localizador, cliente_id, especialidad_id, descripcion, direccion, fecha_servicio, tipo_urgencia, estado)
-                VALUES (?, ?, ?, ?, ?, ?, ?, 'Pendiente')";
-
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([
-            $localizador,
-            $datos['cliente_id'],
-            $datos['especialidad_id'],
-            $datos['descripcion'],
-            $datos['direccion'],
-            $datos['fecha_servicio'],   // 'YYYY-MM-DD HH:MM:SS'
-            $datos['tipo_urgencia'],    // 'Estándar' | 'Urgente'
-        ]);
-    }
+    // 3. AÑADIMOS 'tipo_urgencia' tanto en las columnas como en los VALUES (?)
+    $sql = "INSERT INTO incidencias (localizador, cliente_id, especialidad_id, descripcion, direccion, fecha_servicio, tipo_urgencia, estado) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'Pendiente')";
+    
+    $stmt = $this->db->prepare($sql);
+    
+    // 4. Pasamos el valor que viene del formulario
+    return $stmt->execute([
+        $localizador,
+        $datos['cliente_id'],
+        $datos['especialidad_id'],
+        $datos['descripcion'],
+        $datos['direccion'],
+        $datos['fecha_servicio'],
+        $datos['tipo_urgencia'] // <--- Esto es lo que faltaba y causaba el error de la foto
+    ]);
+}
 
     public function editarIncidencia($id, $datos) {
         $sql = "UPDATE incidencias SET
@@ -99,7 +102,7 @@ class Admin_modelo {
 
     // ── ASIGNACIÓN ─────────────────────────────────────────────────
 
-    // CORRECCIÓN: columna es tecnico_id, no id_tecnico. Estado es 'Asignada', no 'Asignado'
+   
     public function asignarTecnico($id_incidencia, $id_tecnico) {
         $sql = "UPDATE incidencias SET tecnico_id = ?, estado = 'Asignada' WHERE id = ?";
         $stmt = $this->db->prepare($sql);
@@ -114,7 +117,7 @@ class Admin_modelo {
 
     // ── TÉCNICOS ───────────────────────────────────────────────────
 
-    // CORRECCIÓN: antes consultaba solo usuarios, ahora hace JOIN correcto con tecnicos
+    
     public function listarTecnicos() {
         $sql = "SELECT 
                     t.id,
