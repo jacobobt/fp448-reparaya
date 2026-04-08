@@ -52,7 +52,7 @@ class Admin_modelo {
 
     public function guardarIncidencia($datos) {
         // Localizador único tipo REP-2026-AB3F
-        $localizador = 'REP-' . date('Y') . '-' . strtoupper(substr(uniqid(), -4));
+        $localizador = 'REP-' . date('y') . '-' . strtoupper(substr(uniqid(), -4));
 
         $sql = "INSERT INTO incidencias
                     (localizador, cliente_id, especialidad_id, descripcion, direccion, fecha_servicio, tipo_urgencia, estado)
