@@ -44,4 +44,5 @@ CREATE TABLE incidencias (
     FOREIGN KEY (especialidad_id) REFERENCES especialidades(id)
 );
 
-
+INSERT INTO usuarios (nombre, email, password, rol, telefono) 
+VALUES ('Administrador', 'admin@reparaya.com', '1234', 'admin', '600000000');
