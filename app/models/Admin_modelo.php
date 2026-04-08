@@ -51,17 +51,17 @@ class Admin_modelo {
     }
 
     public function guardarIncidencia($datos) {
-    // 1. Usamos 'y' minúscula para que el año ocupe solo 2 dígitos (evita el error de "Data too long")
+    
     $localizador = 'REP-' . date('y') . '-' . strtoupper(substr(uniqid(), -4));
     
 
-    // 3. AÑADIMOS 'tipo_urgencia' tanto en las columnas como en los VALUES (?)
+    
     $sql = "INSERT INTO incidencias (localizador, cliente_id, especialidad_id, descripcion, direccion, fecha_servicio, tipo_urgencia, estado) 
             VALUES (?, ?, ?, ?, ?, ?, ?, 'Pendiente')";
     
     $stmt = $this->db->prepare($sql);
     
-    // 4. Pasamos el valor que viene del formulario
+    
     return $stmt->execute([
         $localizador,
         $datos['cliente_id'],
@@ -69,7 +69,7 @@ class Admin_modelo {
         $datos['descripcion'],
         $datos['direccion'],
         $datos['fecha_servicio'],
-        $datos['tipo_urgencia'] // <--- Esto es lo que faltaba y causaba el error de la foto
+        $datos['tipo_urgencia']
     ]);
 }
 
