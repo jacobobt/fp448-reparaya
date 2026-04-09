@@ -7,26 +7,32 @@ require_once '/var/www/config/database.php';
 require_once APP_PATH . '/models/Usuario.php';
 
 $page = $_GET['page'] ?? 'home';
+$mensaje = '';
+
 if ($page === 'logout') {
     session_destroy();
     header('Location: ' . BASE_URL);
     exit;
 }
-$mensaje = '';
 
 if ($page === 'register') {
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nombre = trim($_POST['nombre']);
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
-        $telefono = trim($_POST['telefono']);
+        $nombre = trim($_POST['nombre'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
 
-        $registroCorrecto = Usuario::registrar($pdo, $nombre, $email, $password, $telefono);
-
-        if ($registroCorrecto) {
-            $mensaje = 'Usuario registrado correctamente';
+        if ($nombre === '' || $email === '' || $password === '') {
+            $mensaje = 'Nombre, email y contraseña son obligatorios';
         } else {
-            $mensaje = 'Error al registrar el usuario';
+            $registroCorrecto = Usuario::registrar($pdo, $nombre, $email, $password, $telefono);
+
+            if ($registroCorrecto) {
+                $mensaje = 'Usuario registrado correctamente';
+            } else {
+                $mensaje = 'Error al registrar el usuario';
+            }
         }
     }
 
@@ -35,12 +41,13 @@ if ($page === 'register') {
 } elseif ($page === 'login') {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
         $usuario = Usuario::buscarPorEmail($pdo, $email);
 
         if ($usuario && password_verify($password, $usuario['password'])) {
+            session_regenerate_id(true);
             $_SESSION['usuario'] = $usuario;
             header('Location: ' . BASE_URL);
             exit;
@@ -59,48 +66,56 @@ if ($page === 'register') {
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nombre = trim($_POST['nombre']);
-        $email = trim($_POST['email']);
-        $telefono = trim($_POST['telefono']);
-        $passwordActual = trim($_POST['password_actual']);
-        $passwordNueva = trim($_POST['password_nueva']);
+        $nombre = trim($_POST['nombre'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
+        $passwordActual = trim($_POST['password_actual'] ?? '');
+        $passwordNueva = trim($_POST['password_nueva'] ?? '');
 
-        $actualizacionCorrecta = Usuario::actualizarPerfil(
-            $pdo,
-            $_SESSION['usuario']['id'],
-            $nombre,
-            $email,
-            $telefono
-        );
+        if ($nombre === '' || $email === '') {
+            $mensaje = 'Nombre y email son obligatorios';
+        } else {
+            $actualizacionCorrecta = Usuario::actualizarPerfil(
+                $pdo,
+                $_SESSION['usuario']['id'],
+                $nombre,
+                $email,
+                $telefono
+            );
 
-        if ($actualizacionCorrecta) {
-            $_SESSION['usuario']['nombre'] = $nombre;
-            $_SESSION['usuario']['email'] = $email;
-            $_SESSION['usuario']['telefono'] = $telefono;
+            if ($actualizacionCorrecta) {
+                $_SESSION['usuario']['nombre'] = $nombre;
+                $_SESSION['usuario']['email'] = $email;
+                $_SESSION['usuario']['telefono'] = $telefono;
 
-            if (!empty($passwordActual) && !empty($passwordNueva)) {
-                $usuarioActual = Usuario::buscarPorEmail($pdo, $_SESSION['usuario']['email']);
-
-                if ($usuarioActual && password_verify($passwordActual, $usuarioActual['password'])) {
-                    $passwordActualizada = Usuario::actualizarPassword(
-                        $pdo,
-                        $_SESSION['usuario']['id'],
-                        $passwordNueva
-                    );
-
-                    if ($passwordActualizada) {
-                        $mensaje = 'Perfil y contraseña actualizados correctamente';
+                if ($passwordActual !== '' || $passwordNueva !== '') {
+                    if ($passwordActual === '' || $passwordNueva === '') {
+                        $mensaje = 'Para cambiar la contraseña debes rellenar ambos campos';
                     } else {
-                        $mensaje = 'Perfil actualizado, pero hubo un error al cambiar la contraseña';
+                        $usuarioActual = Usuario::buscarPorId($pdo, $_SESSION['usuario']['id']);
+
+                        if ($usuarioActual && password_verify($passwordActual, $usuarioActual['password'])) {
+                            $passwordActualizada = Usuario::actualizarPassword(
+                                $pdo,
+                                $_SESSION['usuario']['id'],
+                                $passwordNueva
+                            );
+
+                            if ($passwordActualizada) {
+                                $mensaje = 'Perfil y contraseña actualizados correctamente';
+                            } else {
+                                $mensaje = 'Perfil actualizado, pero hubo un error al cambiar la contraseña';
+                            }
+                        } else {
+                            $mensaje = 'Perfil actualizado, pero la contraseña actual no es correcta';
+                        }
                     }
                 } else {
-                    $mensaje = 'Perfil actualizado, pero la contraseña actual no es correcta';
+                    $mensaje = 'Perfil actualizado correctamente';
                 }
             } else {
-                $mensaje = 'Perfil actualizado correctamente';
+                $mensaje = 'Error al actualizar el perfil';
             }
-        } else {
-            $mensaje = 'Error al actualizar el perfil';
         }
     }
 
@@ -164,6 +179,26 @@ if ($page === 'register') {
 } elseif ($page === 'especialidad_delete') {
     require_once APP_PATH . '/controllers/MaestrosController.php';
     (new MaestrosController($pdo))->especialidadDelete();
+    exit;
+
+} elseif ($page === 'mis_avisos') {
+    require_once APP_PATH . '/controllers/IncidenciasController.php';
+    (new IncidenciasController($pdo))->misAvisos();
+    exit;
+
+} elseif ($page === 'incidencia_create') {
+    require_once APP_PATH . '/controllers/IncidenciasController.php';
+    (new IncidenciasController($pdo))->create();
+    exit;
+
+} elseif ($page === 'incidencia_store') {
+    require_once APP_PATH . '/controllers/IncidenciasController.php';
+    (new IncidenciasController($pdo))->store();
+    exit;
+
+} elseif ($page === 'incidencia_cancelar') {
+    require_once APP_PATH . '/controllers/IncidenciasController.php';
+    (new IncidenciasController($pdo))->cancelar();
     exit;
 
 } else {

@@ -43,6 +43,12 @@ $totalDisponibles = (int) $stmtDisponibles->fetch(PDO::FETCH_ASSOC)['total'];
                 <a href="<?php echo BASE_URL; ?>/?page=especialidades">Gestionar servicios</a>
                 <a class="secundario" href="<?php echo BASE_URL; ?>/?page=profile">Editar perfil</a>
             </div>
+        <?php elseif ($_SESSION['usuario']['rol'] === 'particular'): ?>
+            <div class="acciones">
+                <a href="<?php echo BASE_URL; ?>/?page=mis_avisos">Ver mis avisos</a>
+                <a href="<?php echo BASE_URL; ?>/?page=incidencia_create">Crear nueva solicitud</a>
+                <a class="secundario" href="<?php echo BASE_URL; ?>/?page=profile">Editar perfil</a>
+            </div>
         <?php else: ?>
             <div class="acciones">
                 <a href="<?php echo BASE_URL; ?>/?page=profile">Ir a mi perfil</a>

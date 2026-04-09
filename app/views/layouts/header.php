@@ -13,6 +13,11 @@
                     <a href="<?php echo BASE_URL; ?>/?page=especialidades">Servicios</a>
                 <?php endif; ?>
 
+                <?php if ($_SESSION['usuario']['rol'] === 'particular'): ?>
+                    <a href="<?php echo BASE_URL; ?>/?page=mis_avisos">Mis avisos</a>
+                    <a href="<?php echo BASE_URL; ?>/?page=incidencia_create">Nueva solicitud</a>
+                <?php endif; ?>
+
                 <a href="<?php echo BASE_URL; ?>/?page=logout">Cerrar sesión</a>
             <?php else: ?>
                 <a href="<?php echo BASE_URL; ?>/?page=login">Login</a>
