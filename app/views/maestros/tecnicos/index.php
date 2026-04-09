@@ -2,20 +2,20 @@
 
 <?php if (!empty($mensaje)): ?>
     <?php if ($mensaje === 'creado'): ?>
-        <p>Técnico creado correctamente.</p>
+        <div class="mensaje">Técnico creado correctamente.</div>
     <?php elseif ($mensaje === 'actualizado'): ?>
-        <p>Técnico actualizado correctamente.</p>
+        <div class="mensaje">Técnico actualizado correctamente.</div>
     <?php elseif ($mensaje === 'estado'): ?>
-        <p>Disponibilidad del técnico actualizada correctamente.</p>
+        <div class="mensaje">Disponibilidad del técnico actualizada correctamente.</div>
     <?php endif; ?>
 <?php endif; ?>
 
-<p>
+<div class="acciones" style="margin-bottom: 16px;">
     <a href="<?php echo BASE_URL; ?>/?page=tecnico_create">Nuevo técnico</a>
-</p>
+</div>
 
 <?php if (!empty($tecnicos)): ?>
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
@@ -50,5 +50,7 @@
         </tbody>
     </table>
 <?php else: ?>
-    <p>No hay técnicos registrados.</p>
+    <div class="bloque">
+        <p>No hay técnicos registrados.</p>
+    </div>
 <?php endif; ?>

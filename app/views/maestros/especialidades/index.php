@@ -2,22 +2,22 @@
 
 <?php if (!empty($mensaje)): ?>
     <?php if ($mensaje === 'creada'): ?>
-        <p>Especialidad creada correctamente.</p>
+        <div class="mensaje">Servicio creado correctamente.</div>
     <?php elseif ($mensaje === 'actualizada'): ?>
-        <p>Especialidad actualizada correctamente.</p>
+        <div class="mensaje">Servicio actualizado correctamente.</div>
     <?php elseif ($mensaje === 'eliminada'): ?>
-        <p>Especialidad eliminada correctamente.</p>
+        <div class="mensaje">Servicio eliminado correctamente.</div>
     <?php elseif ($mensaje === 'bloqueada'): ?>
-        <p>No se puede eliminar la especialidad porque tiene técnicos o incidencias asociadas.</p>
+        <div class="error">No se puede eliminar el servicio porque tiene técnicos o incidencias asociadas.</div>
     <?php endif; ?>
 <?php endif; ?>
 
-<p>
+<div class="acciones" style="margin-bottom: 16px;">
     <a href="<?php echo BASE_URL; ?>/?page=especialidad_create">Nuevo servicio</a>
-</p>
+</div>
 
 <?php if (!empty($especialidades)): ?>
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
@@ -37,14 +37,14 @@
                     <td>
                         <a href="<?php echo BASE_URL; ?>/?page=especialidad_edit&id=<?php echo $especialidad['id']; ?>">Editar</a>
                         |
-                        <a href="<?php echo BASE_URL; ?>/?page=especialidad_delete&id=<?php echo $especialidad['id']; ?>" onclick="return confirm('¿Seguro que quieres eliminar este servicio?');">
-                            Eliminar
-                        </a>
+                        <a href="<?php echo BASE_URL; ?>/?page=especialidad_delete&id=<?php echo $especialidad['id']; ?>" onclick="return confirm('¿Seguro que quieres eliminar este servicio?');">Eliminar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 <?php else: ?>
-    <p>No hay servicios registrados.</p>
+    <div class="bloque">
+        <p>No hay servicios registrados.</p>
+    </div>
 <?php endif; ?>
