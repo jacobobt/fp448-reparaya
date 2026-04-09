@@ -9,6 +9,9 @@
                 <a href="<?php echo BASE_URL; ?>/?page=profile">Mi perfil</a>
 
                 <?php if ($_SESSION['usuario']['rol'] === 'admin'): ?>
+                    <a href="<?php echo BASE_URL; ?>/?page=admin_dashboard">Panel admin</a>
+                    <a href="<?php echo BASE_URL; ?>/?page=admin_incidencias">Avisos</a>
+                    <a href="<?php echo BASE_URL; ?>/?page=admin_calendar">Calendario</a>
                     <a href="<?php echo BASE_URL; ?>/?page=tecnicos">Técnicos</a>
                     <a href="<?php echo BASE_URL; ?>/?page=especialidades">Servicios</a>
                 <?php endif; ?>

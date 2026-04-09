@@ -39,9 +39,11 @@ $totalDisponibles = (int) $stmtDisponibles->fetch(PDO::FETCH_ASSOC)['total'];
 
         <?php if ($_SESSION['usuario']['rol'] === 'admin'): ?>
             <div class="acciones">
+                <a href="<?php echo BASE_URL; ?>/?page=admin_dashboard">Panel admin</a>
+                <a href="<?php echo BASE_URL; ?>/?page=admin_incidencias">Gestionar avisos</a>
+                <a href="<?php echo BASE_URL; ?>/?page=admin_calendar">Calendario</a>
                 <a href="<?php echo BASE_URL; ?>/?page=tecnicos">Gestionar técnicos</a>
                 <a href="<?php echo BASE_URL; ?>/?page=especialidades">Gestionar servicios</a>
-                <a class="secundario" href="<?php echo BASE_URL; ?>/?page=profile">Editar perfil</a>
             </div>
         <?php elseif ($_SESSION['usuario']['rol'] === 'particular'): ?>
             <div class="acciones">

@@ -13,7 +13,7 @@
         }
 
         .contenedor {
-            max-width: 1100px;
+            max-width: 1180px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -21,7 +21,7 @@
         header {
             background-color: #1e3a8a;
             color: white;
-            padding: 20px;
+            padding: 20px 0;
         }
 
         header h2 {
@@ -111,6 +111,7 @@
             border: 1px solid #d1d5db;
             padding: 10px;
             text-align: left;
+            vertical-align: top;
         }
 
         table th {
@@ -121,7 +122,7 @@
         select,
         textarea {
             width: 100%;
-            max-width: 420px;
+            max-width: 500px;
             padding: 10px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
@@ -146,6 +147,93 @@
 
         .texto-suave {
             color: #4b5563;
+        }
+
+        .chip {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .chip.urgente {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .chip.estandar {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .chip.estado-pendiente {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .chip.estado-asignada {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .chip.estado-finalizada {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .chip.estado-cancelada {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+
+        .grid-dos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .grid-tres {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .evento {
+            border-left: 6px solid #2563eb;
+            padding: 14px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 12px;
+        }
+
+        .evento.urgente {
+            border-left-color: #dc2626;
+        }
+
+        .evento.estandar {
+            border-left-color: #2563eb;
+        }
+
+        .evento h4 {
+            margin: 0 0 8px 0;
+        }
+
+        .separador-dia {
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .enlace-titulo {
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .enlace-titulo:hover {
+            text-decoration: underline;
         }
     </style>
 </head>

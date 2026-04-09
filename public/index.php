@@ -201,6 +201,56 @@ if ($page === 'register') {
     (new IncidenciasController($pdo))->cancelar();
     exit;
 
+} elseif ($page === 'admin_dashboard') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->dashboard();
+    exit;
+
+} elseif ($page === 'admin_incidencias') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->incidencias();
+    exit;
+
+} elseif ($page === 'admin_incidencia_create') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->create();
+    exit;
+
+} elseif ($page === 'admin_incidencia_store') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->store();
+    exit;
+
+} elseif ($page === 'admin_incidencia_edit') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->edit();
+    exit;
+
+} elseif ($page === 'admin_incidencia_update') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->update();
+    exit;
+
+} elseif ($page === 'admin_incidencia_cancel') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->cancel();
+    exit;
+
+} elseif ($page === 'admin_incidencia_asignar') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->assign();
+    exit;
+
+} elseif ($page === 'admin_incidencia_guardar_asignacion') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->saveAssign();
+    exit;
+
+} elseif ($page === 'admin_calendar') {
+    require_once APP_PATH . '/controllers/AdminController.php';
+    (new AdminController($pdo))->calendar();
+    exit;
+
 } else {
     $view = APP_PATH . '/views/home/index.php';
 }
