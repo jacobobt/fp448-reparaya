@@ -62,6 +62,8 @@ if ($page === 'register') {
         $nombre = trim($_POST['nombre']);
         $email = trim($_POST['email']);
         $telefono = trim($_POST['telefono']);
+        $passwordActual = trim($_POST['password_actual']);
+        $passwordNueva = trim($_POST['password_nueva']);
 
         $actualizacionCorrecta = Usuario::actualizarPerfil(
             $pdo,
@@ -76,13 +78,93 @@ if ($page === 'register') {
             $_SESSION['usuario']['email'] = $email;
             $_SESSION['usuario']['telefono'] = $telefono;
 
-            $mensaje = 'Perfil actualizado correctamente';
+            if (!empty($passwordActual) && !empty($passwordNueva)) {
+                $usuarioActual = Usuario::buscarPorEmail($pdo, $_SESSION['usuario']['email']);
+
+                if ($usuarioActual && password_verify($passwordActual, $usuarioActual['password'])) {
+                    $passwordActualizada = Usuario::actualizarPassword(
+                        $pdo,
+                        $_SESSION['usuario']['id'],
+                        $passwordNueva
+                    );
+
+                    if ($passwordActualizada) {
+                        $mensaje = 'Perfil y contraseña actualizados correctamente';
+                    } else {
+                        $mensaje = 'Perfil actualizado, pero hubo un error al cambiar la contraseña';
+                    }
+                } else {
+                    $mensaje = 'Perfil actualizado, pero la contraseña actual no es correcta';
+                }
+            } else {
+                $mensaje = 'Perfil actualizado correctamente';
+            }
         } else {
             $mensaje = 'Error al actualizar el perfil';
         }
     }
 
     $view = APP_PATH . '/views/auth/profile.php';
+
+} elseif ($page === 'tecnicos') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->tecnicos();
+    exit;
+
+} elseif ($page === 'tecnico_create') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->tecnicoCreate();
+    exit;
+
+} elseif ($page === 'tecnico_store') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->tecnicoStore();
+    exit;
+
+} elseif ($page === 'tecnico_edit') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->tecnicoEdit();
+    exit;
+
+} elseif ($page === 'tecnico_update') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->tecnicoUpdate();
+    exit;
+
+} elseif ($page === 'tecnico_toggle') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->tecnicoToggle();
+    exit;
+
+} elseif ($page === 'especialidades') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->especialidades();
+    exit;
+
+} elseif ($page === 'especialidad_create') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->especialidadCreate();
+    exit;
+
+} elseif ($page === 'especialidad_store') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->especialidadStore();
+    exit;
+
+} elseif ($page === 'especialidad_edit') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->especialidadEdit();
+    exit;
+
+} elseif ($page === 'especialidad_update') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->especialidadUpdate();
+    exit;
+
+} elseif ($page === 'especialidad_delete') {
+    require_once APP_PATH . '/controllers/MaestrosController.php';
+    (new MaestrosController($pdo))->especialidadDelete();
+    exit;
 
 } else {
     $view = APP_PATH . '/views/home/index.php';
