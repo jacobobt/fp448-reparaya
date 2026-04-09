@@ -47,6 +47,77 @@ class Incidencia
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function obtenerTecnicoPorUsuario($pdo, $usuarioId)
+    {
+        $sql = "SELECT
+                    t.id,
+                    t.usuario_id,
+                    t.nombre_completo,
+                    t.disponible,
+                    e.nombre_especialidad
+                FROM tecnicos t
+                LEFT JOIN especialidades e ON t.especialidad_id = e.id
+                WHERE t.usuario_id = :usuario_id
+                LIMIT 1";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':usuario_id' => $usuarioId
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function contarResumenTecnicoPorUsuario($pdo, $usuarioId)
+    {
+        $sql = "SELECT
+                    COUNT(*) AS total,
+                    SUM(CASE WHEN i.estado = 'Asignada' THEN 1 ELSE 0 END) AS asignadas,
+                    SUM(CASE WHEN i.estado = 'Pendiente' THEN 1 ELSE 0 END) AS pendientes,
+                    SUM(CASE WHEN i.tipo_urgencia = 'Urgente' THEN 1 ELSE 0 END) AS urgentes
+                FROM incidencias i
+                INNER JOIN tecnicos t ON i.tecnico_id = t.id
+                WHERE t.usuario_id = :usuario_id";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':usuario_id' => $usuarioId
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function listarAgendaTecnicoPorUsuario($pdo, $usuarioId)
+    {
+        $sql = "SELECT
+                    i.id,
+                    i.localizador,
+                    i.descripcion,
+                    i.direccion,
+                    i.telefono_contacto,
+                    i.fecha_servicio,
+                    i.franja_horaria,
+                    i.tipo_urgencia,
+                    i.estado,
+                    e.nombre_especialidad,
+                    c.nombre AS cliente_nombre,
+                    c.email AS cliente_email,
+                    c.telefono AS cliente_telefono
+                FROM incidencias i
+                INNER JOIN tecnicos t ON i.tecnico_id = t.id
+                INNER JOIN especialidades e ON i.especialidad_id = e.id
+                INNER JOIN usuarios c ON i.cliente_id = c.id
+                WHERE t.usuario_id = :usuario_id
+                ORDER BY i.fecha_servicio ASC, i.id ASC";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':usuario_id' => $usuarioId
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function generarLocalizador($pdo)
     {
         $anio = date('Y');

@@ -21,6 +21,10 @@
                     <a href="<?php echo BASE_URL; ?>/?page=incidencia_create">Nueva solicitud</a>
                 <?php endif; ?>
 
+                <?php if ($_SESSION['usuario']['rol'] === 'tecnico'): ?>
+                    <a href="<?php echo BASE_URL; ?>/?page=tecnico_agenda">Mi agenda</a>
+                <?php endif; ?>
+
                 <a href="<?php echo BASE_URL; ?>/?page=logout">Cerrar sesión</a>
             <?php else: ?>
                 <a href="<?php echo BASE_URL; ?>/?page=login">Login</a>

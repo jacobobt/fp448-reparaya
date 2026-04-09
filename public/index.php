@@ -251,6 +251,11 @@ if ($page === 'register') {
     (new AdminController($pdo))->calendar();
     exit;
 
+} elseif ($page === 'tecnico_agenda') {
+    require_once APP_PATH . '/controllers/TecnicoPanelController.php';
+    (new TecnicoPanelController($pdo))->agenda();
+    exit;
+
 } else {
     $view = APP_PATH . '/views/home/index.php';
 }
