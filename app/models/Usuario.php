@@ -46,4 +46,18 @@ class Usuario
             ':telefono' => $telefono
         ]);
     }
+
+    public static function actualizarPassword($pdo, $id, $passwordNueva)
+    {
+        $sql = "UPDATE usuarios
+                SET password = :password
+                WHERE id = :id";
+
+        $stmt = $pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $id,
+            ':password' => password_hash($passwordNueva, PASSWORD_DEFAULT)
+        ]);
+    }
 }
