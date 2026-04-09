@@ -15,7 +15,7 @@ class Incidencia
     {
         $anio = date('Y');
 
-        $sql = "SELECT COUNT(*) + 1 AS siguiente
+        $sql = "SELECT COUNT(*) + 1
                 FROM incidencias
                 WHERE YEAR(created_at) = :anio";
 
@@ -31,26 +31,30 @@ class Incidencia
 
     public static function crearCliente($pdo, $clienteId, $especialidadId, $descripcion, $direccion, $telefonoContacto, $fechaServicio, $franjaHoraria, $tipoUrgencia)
     {
-        $localizador = self::generarLocalizador($pdo);
+        try {
+            $localizador = self::generarLocalizador($pdo);
 
-        $sql = "INSERT INTO incidencias
-                (localizador, cliente_id, especialidad_id, descripcion, direccion, telefono_contacto, fecha_servicio, franja_horaria, tipo_urgencia, estado)
-                VALUES
-                (:localizador, :cliente_id, :especialidad_id, :descripcion, :direccion, :telefono_contacto, :fecha_servicio, :franja_horaria, :tipo_urgencia, 'Pendiente')";
+            $sql = "INSERT INTO incidencias
+                    (localizador, cliente_id, especialidad_id, descripcion, direccion, telefono_contacto, fecha_servicio, franja_horaria, tipo_urgencia, estado)
+                    VALUES
+                    (:localizador, :cliente_id, :especialidad_id, :descripcion, :direccion, :telefono_contacto, :fecha_servicio, :franja_horaria, :tipo_urgencia, 'Pendiente')";
 
-        $stmt = $pdo->prepare($sql);
+            $stmt = $pdo->prepare($sql);
 
-        return $stmt->execute([
-            ':localizador' => $localizador,
-            ':cliente_id' => $clienteId,
-            ':especialidad_id' => $especialidadId,
-            ':descripcion' => $descripcion,
-            ':direccion' => $direccion,
-            ':telefono_contacto' => $telefonoContacto,
-            ':fecha_servicio' => $fechaServicio,
-            ':franja_horaria' => $franjaHoraria,
-            ':tipo_urgencia' => $tipoUrgencia
-        ]);
+            return $stmt->execute([
+                ':localizador' => $localizador,
+                ':cliente_id' => $clienteId,
+                ':especialidad_id' => $especialidadId,
+                ':descripcion' => $descripcion,
+                ':direccion' => $direccion,
+                ':telefono_contacto' => $telefonoContacto,
+                ':fecha_servicio' => $fechaServicio,
+                ':franja_horaria' => $franjaHoraria,
+                ':tipo_urgencia' => $tipoUrgencia
+            ]);
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 
     public static function listarPorCliente($pdo, $clienteId)
@@ -99,24 +103,27 @@ class Incidencia
 
     public static function cancelarCliente($pdo, $id, $clienteId)
     {
-        $sql = "UPDATE incidencias
-                SET estado = 'Cancelada'
-                WHERE id = :id
-                  AND cliente_id = :cliente_id";
+        try {
+            $sql = "UPDATE incidencias
+                    SET estado = 'Cancelada'
+                    WHERE id = :id
+                      AND cliente_id = :cliente_id";
 
-        $stmt = $pdo->prepare($sql);
+            $stmt = $pdo->prepare($sql);
 
-        return $stmt->execute([
-            ':id' => $id,
-            ':cliente_id' => $clienteId
-        ]);
+            return $stmt->execute([
+                ':id' => $id,
+                ':cliente_id' => $clienteId
+            ]);
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 
     public static function puedeCrearEstandar($fechaServicio)
     {
         $ahora = new DateTime();
         $fecha = new DateTime($fechaServicio);
-        $diferencia = $ahora->getTimestamp() - $fecha->getTimestamp();
 
         return ($fecha->getTimestamp() - $ahora->getTimestamp()) >= (48 * 60 * 60);
     }
