@@ -45,4 +45,4 @@ CREATE TABLE incidencias (
 );
 
 INSERT INTO usuarios (nombre, email, password, rol, telefono) 
-VALUES ('Administrador', 'admin@reparaya.com', '1234', 'admin', '600000000');
+VALUES ('AdministradorA', 'admina@reparaya.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', '600000000');

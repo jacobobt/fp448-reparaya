@@ -5,7 +5,7 @@
 
         <?php if (!empty($_SESSION['usuario'])): ?>
             <span>Hola, <?php echo $_SESSION['usuario']['nombre']; ?></span> |
-            <a href="<?php echo BASE_URL; ?>/?page=profile">Mi perfil</a>
+            <a href="<?php echo BASE_URL; ?>/?page=profile">Mi perfil</a> |
             
                 <?php if ($_SESSION['usuario']['rol'] === 'admin'): ?>
                 <a href="<?php echo BASE_URL; ?>?page=admin_dashboard">Panel Admin</a> | 
