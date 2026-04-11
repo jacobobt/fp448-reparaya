@@ -4,8 +4,15 @@ ini_set('display_errors', 1);
 
 session_start();
 
-require_once __DIR__ . '/config/config.php';
-require_once __DIR__ . '/config/database.php';
+if ($_SERVER['SERVER_NAME'] === 'localhost') {
+    // Local
+    require_once '/var/www/config/config.php';
+    require_once '/var/www/config/database.php';
+} else {
+    // Servidor
+    require_once __DIR__ . '/config/config.php';
+    require_once __DIR__ . '/config/database.php';
+}
 require_once APP_PATH . '/models/Usuario.php';
 
 $page = $_GET['page'] ?? 'home';
