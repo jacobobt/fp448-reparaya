@@ -160,7 +160,8 @@ class Incidencia
                 ':tipo_urgencia' => $tipoUrgencia
             ]);
         } catch (Throwable $e) {
-            return false;
+            die($e->getMessage());
+            // return false;
         }
     }
 

@@ -73,9 +73,9 @@
 
             <div>
                 <label for="tipo_urgencia">Urgencia:</label><br>
-                <?php $urgenciaSeleccionada = $_POST['tipo_urgencia'] ?? ($incidencia['tipo_urgencia'] ?? 'Estándar'); ?>
+                <?php $urgenciaSeleccionada = $_POST['tipo_urgencia'] ?? ($incidencia['tipo_urgencia'] ?? 'Estandar'); ?>
                 <select id="tipo_urgencia" name="tipo_urgencia" required>
-                    <option value="Estándar" <?php echo $urgenciaSeleccionada === 'Estándar' ? 'selected' : ''; ?>>Estándar</option>
+                    <option value="Estándar" <?php echo $urgenciaSeleccionada === 'Estandar' ? 'selected' : ''; ?>>Estandar</option>
                     <option value="Urgente" <?php echo $urgenciaSeleccionada === 'Urgente' ? 'selected' : ''; ?>>Urgente</option>
                 </select>
             </div>

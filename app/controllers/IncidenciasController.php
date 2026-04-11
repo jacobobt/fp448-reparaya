@@ -65,7 +65,7 @@ class IncidenciasController
         $telefonoContacto = trim($_POST['telefono_contacto'] ?? '');
         $fecha = trim($_POST['fecha'] ?? '');
         $franjaHoraria = trim($_POST['franja_horaria'] ?? '');
-        $tipoUrgencia = trim($_POST['tipo_urgencia'] ?? 'Estándar');
+        $tipoUrgencia = trim($_POST['tipo_urgencia'] ?? 'Estandar');
 
         $horaInicio = '09:00:00';
         if ($franjaHoraria === '16:00-20:00') {
@@ -81,7 +81,7 @@ class IncidenciasController
             return;
         }
 
-        if ($tipoUrgencia === 'Estándar' && !Incidencia::puedeCrearEstandar($fechaServicio)) {
+        if ($tipoUrgencia === 'Estandar' && !Incidencia::puedeCrearEstandar($fechaServicio)) {
             $error = 'Los avisos estándar deben solicitarse con al menos 48 horas de antelación.';
             $view = APP_PATH . '/views/incidencias/form.php';
             require APP_PATH . '/views/layouts/main.php';
