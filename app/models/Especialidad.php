@@ -7,6 +7,7 @@ class Especialidad
         $sql = "SELECT 
                     e.id,
                     e.nombre_especialidad,
+                    e.precio,
                     (SELECT COUNT(*) FROM tecnicos t WHERE t.especialidad_id = e.id) AS total_tecnicos,
                     (SELECT COUNT(*) FROM incidencias i WHERE i.especialidad_id = e.id) AS total_incidencias
                 FROM especialidades e
@@ -24,29 +25,31 @@ class Especialidad
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function crear($pdo, $nombreEspecialidad)
+    public static function crear($pdo, $nombreEspecialidad, $precio)
     {
-        $sql = "INSERT INTO especialidades (nombre_especialidad)
-                VALUES (:nombre_especialidad)";
+        $sql = "INSERT INTO especialidades (nombre_especialidad, precio)
+                VALUES (:nombre_especialidad, :precio)";
 
         $stmt = $pdo->prepare($sql);
 
         return $stmt->execute([
-            ':nombre_especialidad' => $nombreEspecialidad
+            ':nombre_especialidad' => $nombreEspecialidad,
+            ':precio' => $precio
         ]);
     }
 
-    public static function actualizar($pdo, $id, $nombreEspecialidad)
+    public static function actualizar($pdo, $id, $nombreEspecialidad, $precio)
     {
         $sql = "UPDATE especialidades
-                SET nombre_especialidad = :nombre_especialidad
+                SET nombre_especialidad = :nombre_especialidad, precio = :precio
                 WHERE id = :id";
 
         $stmt = $pdo->prepare($sql);
 
         return $stmt->execute([
             ':id' => $id,
-            ':nombre_especialidad' => $nombreEspecialidad
+            ':nombre_especialidad' => $nombreEspecialidad,
+            ':precio' => $precio
         ]);
     }
 
