@@ -30,6 +30,7 @@
                 <th>Estado</th>
                 <th>Técnico</th>
                 <th>Acciones</th>
+                <th>Precio</th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +62,7 @@
                         |
                         <a href="<?php echo BASE_URL; ?>/?page=admin_incidencia_cancel&id=<?php echo $incidencia['id']; ?>" onclick="return confirm('¿Seguro que quieres cancelar este aviso?');">Cancelar</a>
                     </td>
+                    <td><?php echo number_format($incidencia['precio_servicio'], 2); ?> €</td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
