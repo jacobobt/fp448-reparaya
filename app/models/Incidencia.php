@@ -198,6 +198,7 @@ class Incidencia
                 ':estado' => $estado
             ]);
         } catch (Throwable $e) {
+            //die("ERROR CREANDO INCIDENCIA: " . $e->getMessage());
             return false;
         }
     }
@@ -243,6 +244,7 @@ class Incidencia
                     i.tipo_urgencia,
                     i.estado,
                     e.nombre_especialidad,
+                    e.precio as precio_servicio,
                     c.nombre AS cliente_nombre,
                     c.email AS cliente_email,
                     t.nombre_completo AS tecnico_nombre
