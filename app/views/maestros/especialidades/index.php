@@ -24,6 +24,7 @@
                 <th>Nombre del servicio</th>
                 <th>Total técnicos</th>
                 <th>Total incidencias</th>
+                <th>Precio</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -34,6 +35,7 @@
                     <td><?php echo htmlspecialchars($especialidad['nombre_especialidad']); ?></td>
                     <td><?php echo (int) $especialidad['total_tecnicos']; ?></td>
                     <td><?php echo (int) $especialidad['total_incidencias']; ?></td>
+                    <td><?php echo number_format($especialidad['precio'], 2); ?> €</td>
                     <td>
                         <a href="<?php echo BASE_URL; ?>/?page=especialidad_edit&id=<?php echo $especialidad['id']; ?>">Editar</a>
                         |
