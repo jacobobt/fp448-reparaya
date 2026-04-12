@@ -39,7 +39,7 @@ CREATE TABLE incidencias (
     descripcion TEXT NOT NULL,
     direccion VARCHAR(255) NOT NULL,
     fecha_servicio DATETIME NOT NULL, -- Campo clave para la regla de las 48h
-    tipo_urgencia ENUM('Estándar', 'Urgente') DEFAULT 'Estándar',
+    tipo_urgencia ENUM('Estandar', 'Urgente') DEFAULT 'Estandar',
     estado ENUM('Pendiente', 'Asignada', 'Finalizada', 'Cancelada') DEFAULT 'Pendiente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES usuarios(id),
