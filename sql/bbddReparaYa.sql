@@ -31,6 +31,7 @@ CREATE TABLE incidencias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     localizador VARCHAR(20) NOT NULL UNIQUE, -- Código tipo REP-2026-XXXX
     telefono_contacto VARCHAR(20) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL DEFAULT 0.00, -- Precio del servicio
     franja_horaria ENUM('09:00-13:00','16:00-20:00') NOT NULL DEFAULT '09:00-13:00',
     cliente_id INT NOT NULL,
     tecnico_id INT DEFAULT NULL, -- El admin lo asignará después
