@@ -207,8 +207,18 @@ class MaestrosController
             require APP_PATH . '/views/layouts/main.php';
             return;
         }
+        
+        $precio = isset($_POST['precio']) ? (float) $_POST['precio'] : 0.00;
 
-        Especialidad::crear($this->pdo, $nombreEspecialidad);
+        if ($precio < 0) {
+            $especialidad = null;
+            $error = 'Revisa el precio. No puede ser negativo.';
+            $view = APP_PATH . '/views/maestros/especialidades/form.php';
+            require APP_PATH . '/views/layouts/main.php';
+            return;
+        }
+
+        Especialidad::crear($this->pdo, $nombreEspecialidad, $precio);
 
         header('Location: ' . BASE_URL . '/?page=especialidades&msg=creada');
         exit;
@@ -260,7 +270,16 @@ class MaestrosController
             return;
         }
 
-        Especialidad::actualizar($this->pdo, $id, $nombreEspecialidad);
+        $precio = isset($_POST['precio']) ? (float) $_POST['precio'] : 0.00;
+
+        if ($precio < 0) {
+            $error = 'Revisa el precio. No puede ser negativo.';
+            $view = APP_PATH . '/views/maestros/especialidades/form.php';
+            require APP_PATH . '/views/layouts/main.php';
+            return;
+        }
+
+        Especialidad::actualizar($this->pdo, $id, $nombreEspecialidad, $precio);
 
         header('Location: ' . BASE_URL . '/?page=especialidades&msg=actualizada');
         exit;
