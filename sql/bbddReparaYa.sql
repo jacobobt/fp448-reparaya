@@ -29,7 +29,7 @@ CREATE TABLE tecnicos (
 -- 4. TABLA DE INCIDENCIAS/RESERVAS (Para el Alumno de Gestión de Incidencias)
 CREATE TABLE incidencias (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    localizador VARCHAR(12) NOT NULL UNIQUE, -- Código tipo REP-2026-XXXX
+    localizador VARCHAR(20) NOT NULL UNIQUE, -- Código tipo REP-2026-XXXX
     telefono_contacto VARCHAR(20) NOT NULL,
     franja_horaria ENUM('09:00-13:00','16:00-20:00') NOT NULL DEFAULT '09:00-13:00',
     cliente_id INT NOT NULL,
