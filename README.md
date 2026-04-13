@@ -27,6 +27,11 @@ Usuario: wordpress5
 Contraseña: 2ZNG53TdCaOoLpvp
 
 
+# Usuarios de la base de datos. 
+
+Se han creado algunos usuarios en la base de datos para poder realizar tests con ellos. Todos ellos son visibles desde la base de datos, pero sus contraseñas aparecen encriptadas. Para una mayor facilidad, se les ha asignado a todos ellos por defecto la misma contraseña: 1234
+
+
 # Configuración automática del entorno. 
 
 El archivo config.php detecta automáticamente si la aplicación se ejecuta en local o en servidor. 
