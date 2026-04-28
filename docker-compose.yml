@@ -25,7 +25,20 @@ services:
       - "3308:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./sql:/docker-entrypoint-initdb.d
+      - ./sql_old:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: reparaya_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - db
 
 volumes:
   db_data:
