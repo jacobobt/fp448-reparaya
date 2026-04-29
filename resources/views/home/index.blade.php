@@ -17,6 +17,25 @@
             padding: 24px 40px;
         }
 
+        nav {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        nav a,
+        nav button {
+            background: white;
+            color: #0f766e;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         main {
             max-width: 1100px;
             margin: 32px auto;
@@ -65,6 +84,35 @@
 <header>
     <h1>ReparaYa</h1>
     <p>Producto 3 - Migración a Laravel</p>
+
+    <nav>
+        <a href="{{ route('home') }}">Inicio</a>
+
+        @auth
+            <span>Hola, {{ auth()->user()->nombre }} ({{ auth()->user()->rol }})</span>
+
+            @if (auth()->user()->rol === 'admin')
+                <a href="#">Panel administrador</a>
+            @endif
+
+            @if (auth()->user()->rol === 'tecnico')
+                <a href="#">Mi agenda</a>
+            @endif
+
+            @if (auth()->user()->rol === 'particular')
+                <a href="#">Mis avisos</a>
+                <a href="#">Nuevo aviso</a>
+            @endif
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit">Cerrar sesión</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}">Iniciar sesión</a>
+            <a href="{{ route('register') }}">Registro</a>
+        @endauth
+    </nav>
 </header>
 
 <main>
@@ -76,7 +124,7 @@
 
         <div class="card">
             <div class="number">{{ $totalTecnicos }}</div>
-            <div>Técnicos disponibles</div>
+            <div>Técnicos registrados</div>
         </div>
 
         <div class="card">
