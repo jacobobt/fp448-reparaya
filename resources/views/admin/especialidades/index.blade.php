@@ -1,22 +1,20 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Especialidades - ReparaYa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Especialidades - ReparaYa')
+
+@section('content')
     <h1>Especialidades</h1>
 
-    <p>
-        <a href="{{ route('admin.dashboard') }}">Panel administrador</a> |
-        <a href="{{ route('admin.especialidades.create') }}">Nueva especialidad</a>
-    </p>
+    <div class="actions">
+        <a class="button" href="{{ route('admin.dashboard') }}">Panel administrador</a>
+        <a class="button" href="{{ route('admin.especialidades.create') }}">Nueva especialidad</a>
+    </div>
 
     @if (session('success'))
-        <p style="color:green">{{ session('success') }}</p>
+        <p class="success">{{ session('success') }}</p>
     @endif
 
-    <table border="1" cellpadding="8">
+    <table>
         <thead>
         <tr>
             <th>Nombre</th>
@@ -40,5 +38,4 @@
         @endforelse
         </tbody>
     </table>
-</body>
-</html>
+@endsection

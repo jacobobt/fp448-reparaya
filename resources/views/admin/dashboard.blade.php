@@ -1,42 +1,44 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Panel administrador - ReparaYa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Panel administrador - ReparaYa')
+
+@section('content')
     <h1>Panel administrador</h1>
 
-    <p>
-        <a href="{{ route('home') }}">Inicio</a>
-    </p>
+    <div class="actions">
+        <a class="button" href="{{ route('admin.incidencias.index') }}">Gestionar incidencias</a>
+        <a class="button" href="{{ route('admin.especialidades.index') }}">Gestionar especialidades</a>
+        <a class="button" href="{{ route('admin.tecnicos.index') }}">Gestionar técnicos</a>
+    </div>
 
-    <p>
-        <a href="{{ route('admin.incidencias.index') }}">Gestionar incidencias</a>
-    </p>
+    <section class="stats">
+        <div class="card">
+            <div class="number">{{ $totalUsuarios }}</div>
+            <div>Usuarios registrados</div>
+        </div>
 
-    <p>
-        <a href="{{ route('admin.especialidades.index') }}">Gestionar especialidades</a>
-    </p>
+        <div class="card">
+            <div class="number">{{ $totalTecnicos }}</div>
+            <div>Técnicos registrados</div>
+        </div>
 
-    <p>
-        <a href="{{ route('admin.tecnicos.index') }}">Gestionar técnicos</a>
-    </p>
+        <div class="card">
+            <div class="number">{{ $pendientes }}</div>
+            <div>Incidencias pendientes</div>
+        </div>
+    </section>
 
-    <h2>Resumen</h2>
+    <h2>Resumen de estados</h2>
 
     <ul>
-        <li>Usuarios registrados: {{ $totalUsuarios }}</li>
-        <li>Técnicos registrados: {{ $totalTecnicos }}</li>
-        <li>Incidencias pendientes: {{ $pendientes }}</li>
-        <li>Incidencias asignadas: {{ $asignadas }}</li>
-        <li>Incidencias finalizadas: {{ $finalizadas }}</li>
-        <li>Incidencias canceladas: {{ $canceladas }}</li>
+        <li>Asignadas: {{ $asignadas }}</li>
+        <li>Finalizadas: {{ $finalizadas }}</li>
+        <li>Canceladas: {{ $canceladas }}</li>
     </ul>
 
     <h2>Últimas incidencias</h2>
 
-    <table border="1" cellpadding="8">
+    <table>
         <thead>
         <tr>
             <th>Localizador</th>
@@ -64,5 +66,4 @@
         @endforelse
         </tbody>
     </table>
-</body>
-</html>
+@endsection

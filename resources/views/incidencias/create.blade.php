@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Nuevo aviso - ReparaYa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Nuevo aviso - ReparaYa')
+
+@section('content')
     <h1>Nuevo aviso</h1>
 
-    <p>
-        <a href="{{ route('home') }}">Inicio</a> |
-        <a href="{{ route('incidencias.index') }}">Mis avisos</a>
-    </p>
+    <div class="actions">
+        <a class="button" href="{{ route('incidencias.index') }}">Mis avisos</a>
+    </div>
 
     @if ($errors->any())
-        <ul style="color:red">
+        <ul class="error">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
@@ -59,5 +56,4 @@
 
         <button type="submit">Crear aviso</button>
     </form>
-</body>
-</html>
+@endsection

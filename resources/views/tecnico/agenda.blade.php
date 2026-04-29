@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mi agenda - ReparaYa</title>
-</head>
-<body>
-    <h1>Mi agenda</h1>
+@extends('layouts.app')
 
-    <p>
-        <a href="{{ route('home') }}">Inicio</a>
-    </p>
+@section('title', 'Mi agenda - ReparaYa')
+
+@section('content')
+    <h1>Mi agenda</h1>
 
     <p>
         Técnico: {{ $tecnico->nombre_completo }}
     </p>
 
     @if (session('success'))
-        <p style="color:green">{{ session('success') }}</p>
+        <p class="success">{{ session('success') }}</p>
     @endif
 
-    <table border="1" cellpadding="8">
+    <table>
         <thead>
         <tr>
             <th>Localizador</th>
@@ -65,5 +59,4 @@
         @endforelse
         </tbody>
     </table>
-</body>
-</html>
+@endsection

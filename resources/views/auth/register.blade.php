@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Registro - ReparaYa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Registro - ReparaYa')
+
+@section('content')
     <h1>Registro de cliente</h1>
 
     @if ($errors->any())
-        <ul style="color:red">
+        <ul class="error">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
@@ -36,5 +34,4 @@
     <p>
         <a href="{{ route('login') }}">Ya tengo cuenta</a>
     </p>
-</body>
-</html>
+@endsection

@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - ReparaYa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Login - ReparaYa')
+
+@section('content')
     <h1>Iniciar sesión</h1>
 
     @if ($errors->any())
-        <p style="color:red">{{ $errors->first() }}</p>
+        <p class="error">{{ $errors->first() }}</p>
     @endif
 
     <form method="POST" action="{{ route('login') }}">
@@ -26,5 +24,4 @@
     <p>
         <a href="{{ route('register') }}">Crear cuenta</a>
     </p>
-</body>
-</html>
+@endsection

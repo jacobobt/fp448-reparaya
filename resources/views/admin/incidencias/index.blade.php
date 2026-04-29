@@ -1,22 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Incidencias - Admin ReparaYa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Incidencias - Admin ReparaYa')
+
+@section('content')
     <h1>Gestión de incidencias</h1>
 
-    <p>
-        <a href="{{ route('admin.dashboard') }}">Panel administrador</a> |
-        <a href="{{ route('home') }}">Inicio</a>
-    </p>
+    <div class="actions">
+        <a class="button" href="{{ route('admin.dashboard') }}">Panel administrador</a>
+    </div>
 
     @if (session('success'))
-        <p style="color:green">{{ session('success') }}</p>
+        <p class="success">{{ session('success') }}</p>
     @endif
 
-    <table border="1" cellpadding="8">
+    <table>
         <thead>
         <tr>
             <th>Localizador</th>
@@ -41,7 +38,6 @@
                 <td>{{ $incidencia->direccion }}</td>
                 <td>{{ $incidencia->fecha_servicio->format('d/m/Y H:i') }}</td>
                 <td>{{ $incidencia->tipo_urgencia }}</td>
-                
                 <td>
                     <div>
                         {{ $incidencia->tecnico->nombre_completo ?? 'Sin asignar' }}
@@ -66,7 +62,6 @@
                         <button type="submit">Asignar</button>
                     </form>
                 </td>
-
                 <td>{{ $incidencia->estado }}</td>
                 <td>
                     <form method="POST" action="{{ route('admin.incidencias.estado', $incidencia) }}">
@@ -92,5 +87,4 @@
         @endforelse
         </tbody>
     </table>
-</body>
-</html>
+@endsection

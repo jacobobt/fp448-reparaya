@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Nueva especialidad - ReparaYa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Nueva especialidad - ReparaYa')
+
+@section('content')
     <h1>Nueva especialidad</h1>
 
-    <p>
-        <a href="{{ route('admin.especialidades.index') }}">Volver</a>
-    </p>
+    <div class="actions">
+        <a class="button" href="{{ route('admin.especialidades.index') }}">Volver</a>
+    </div>
 
     @if ($errors->any())
-        <ul style="color:red">
+        <ul class="error">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
@@ -30,5 +28,4 @@
 
         <button type="submit">Guardar</button>
     </form>
-</body>
-</html>
+@endsection

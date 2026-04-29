@@ -1,26 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mis avisos - ReparaYa</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Mis avisos - ReparaYa')
+
+@section('content')
     <h1>Mis avisos</h1>
 
-    <p>
-        <a href="{{ route('home') }}">Inicio</a> |
-        <a href="{{ route('incidencias.create') }}">Nuevo aviso</a>
-    </p>
+    <div class="actions">
+        <a class="button" href="{{ route('incidencias.create') }}">Nuevo aviso</a>
+    </div>
 
     @if (session('success'))
-        <p style="color:green">{{ session('success') }}</p>
+        <p class="success">{{ session('success') }}</p>
     @endif
 
     @if (session('error'))
-        <p style="color:red">{{ session('error') }}</p>
+        <p class="error">{{ session('error') }}</p>
     @endif
 
-    <table border="1" cellpadding="8">
+    <table>
         <thead>
         <tr>
             <th>Localizador</th>
@@ -64,5 +61,4 @@
         @endforelse
         </tbody>
     </table>
-</body>
-</html>
+@endsection
