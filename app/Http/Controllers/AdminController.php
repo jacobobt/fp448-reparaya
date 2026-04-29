@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Incidencia;
 use App\Models\Tecnico;
 use App\Models\Usuario;
+use App\Models\Especialidad;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -24,6 +26,32 @@ class AdminController extends Controller
                 ->take(10)
                 ->get(),
         ]);
+    }
+
+    public function incidencias()
+    {
+        $this->autorizarAdmin();
+
+        $incidencias = Incidencia::with(['cliente', 'especialidad', 'tecnico'])
+          ->latest('created_at')
+          ->get();
+
+        return view('admin.incidencias.index', compact('incidencias'));
+    }
+
+    public function cambiarEstado(Request $request, Incidencia $incidencia)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'estado' => ['required', 'in:Pendiente,Asignada,Finalizada,Cancelada'],
+        ]);
+
+        $incidencia->update([
+            'estado' => $datos['estado'],
+        ]);
+
+        return back()->with('success', 'Estado actualizado correctamente.');
     }
 
     private function autorizarAdmin(): void

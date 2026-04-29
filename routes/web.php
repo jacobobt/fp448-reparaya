@@ -23,4 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/avisos/{incidencia}/cancelar', [IncidenciaController::class, 'cancelar'])->name('incidencias.cancelar');
     
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    Route::get('/admin/incidencias', [AdminController::class, 'incidencias'])->name('admin.incidencias.index');
+    Route::patch('/admin/incidencias/{incidencia}/estado', [AdminController::class, 'cambiarEstado'])->name('admin.incidencias.estado');
 });
