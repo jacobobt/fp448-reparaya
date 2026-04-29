@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IncidenciaController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -13,3 +14,10 @@ Route::get('/registro', [AuthController::class, 'showRegister'])->name('register
 Route::post('/registro', [AuthController::class, 'register']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/mis-avisos', [IncidenciaController::class, 'index'])->name('incidencias.index');
+    Route::get('/avisos/nuevo', [IncidenciaController::class, 'create'])->name('incidencias.create');
+    Route::post('/avisos', [IncidenciaController::class, 'store'])->name('incidencias.store');
+    Route::patch('/avisos/{incidencia}/cancelar', [IncidenciaController::class, 'cancelar'])->name('incidencias.cancelar');
+});

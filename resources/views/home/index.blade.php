@@ -100,8 +100,8 @@
             @endif
 
             @if (auth()->user()->rol === 'particular')
-                <a href="#">Mis avisos</a>
-                <a href="#">Nuevo aviso</a>
+                <a href="{{ route('incidencias.index') }}">Mis avisos</a>
+                <a href="{{ route('incidencias.create') }}">Nuevo aviso</a>
             @endif
 
             <form method="POST" action="{{ route('logout') }}">
