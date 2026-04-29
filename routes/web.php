@@ -34,4 +34,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/especialidades', [AdminController::class, 'guardarEspecialidad'])->name('admin.especialidades.store');
     Route::get('/admin/especialidades/{especialidad}/editar', [AdminController::class, 'editarEspecialidad'])->name('admin.especialidades.edit');
     Route::patch('/admin/especialidades/{especialidad}', [AdminController::class, 'actualizarEspecialidad'])->name('admin.especialidades.update');
+
+    Route::get('/admin/tecnicos', [AdminController::class, 'tecnicos'])->name('admin.tecnicos.index');
+    Route::get('/admin/tecnicos/nuevo', [AdminController::class, 'crearTecnico'])->name('admin.tecnicos.create');
+    Route::post('/admin/tecnicos', [AdminController::class, 'guardarTecnico'])->name('admin.tecnicos.store');
+    Route::get('/admin/tecnicos/{tecnico}/editar', [AdminController::class, 'editarTecnico'])->name('admin.tecnicos.edit');
+    Route::patch('/admin/tecnicos/{tecnico}', [AdminController::class, 'actualizarTecnico'])->name('admin.tecnicos.update');
+    Route::patch('/admin/tecnicos/{tecnico}/disponibilidad', [AdminController::class, 'cambiarDisponibilidadTecnico'])->name('admin.tecnicos.disponibilidad');
 });

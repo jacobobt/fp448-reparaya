@@ -130,6 +130,98 @@ class AdminController extends Controller
             ->with('success', 'Especialidad actualizada correctamente.');
     }
 
+
+
+
+    public function tecnicos()
+    {
+        $this->autorizarAdmin();
+
+        $tecnicos = Tecnico::with(['usuario', 'especialidad'])
+            ->orderBy('nombre_completo')
+            ->get();
+
+        return view('admin.tecnicos.index', compact('tecnicos'));
+    }
+
+    public function crearTecnico()
+    {
+        $this->autorizarAdmin();
+
+        $usuarios = Usuario::where('rol', 'tecnico')
+            ->whereDoesntHave('tecnico')
+            ->orderBy('nombre')
+            ->get();
+
+        $especialidades = Especialidad::orderBy('nombre_especialidad')->get();
+
+        return view('admin.tecnicos.create', compact('usuarios', 'especialidades'));
+    }
+
+    public function guardarTecnico(Request $request)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'usuario_id' => ['nullable', 'exists:usuarios,id', 'unique:tecnicos,usuario_id'],
+            'nombre_completo' => ['required', 'string', 'max:100'],
+            'especialidad_id' => ['nullable', 'exists:especialidades,id'],
+            'disponible' => ['required', 'boolean'],
+        ]);
+
+        Tecnico::create($datos);
+
+        return redirect()
+            ->route('admin.tecnicos.index')
+            ->with('success', 'Técnico creado correctamente.');
+    }
+
+    public function editarTecnico(Tecnico $tecnico)
+    {
+        $this->autorizarAdmin();
+
+        $usuarios = Usuario::where('rol', 'tecnico')
+            ->where(function ($query) use ($tecnico) {
+                $query->whereDoesntHave('tecnico')
+                    ->orWhere('id', $tecnico->usuario_id);
+            })
+            ->orderBy('nombre')
+            ->get();
+
+        $especialidades = Especialidad::orderBy('nombre_especialidad')->get();
+
+        return view('admin.tecnicos.edit', compact('tecnico', 'usuarios', 'especialidades'));
+    }
+
+    public function actualizarTecnico(Request $request, Tecnico $tecnico)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'usuario_id' => ['nullable', 'exists:usuarios,id', 'unique:tecnicos,usuario_id,' . $tecnico->id],
+            'nombre_completo' => ['required', 'string', 'max:100'],
+            'especialidad_id' => ['nullable', 'exists:especialidades,id'],
+            'disponible' => ['required', 'boolean'],
+        ]);
+
+        $tecnico->update($datos);
+
+        return redirect()
+            ->route('admin.tecnicos.index')
+            ->with('success', 'Técnico actualizado correctamente.');
+    }
+
+    public function cambiarDisponibilidadTecnico(Tecnico $tecnico)
+    {
+        $this->autorizarAdmin();
+
+        $tecnico->update([
+            'disponible' => !$tecnico->disponible,
+        ]);
+
+        return back()->with('success', 'Disponibilidad actualizada correctamente.');
+    }
+
     private function autorizarAdmin(): void
     {
         if (!auth()->check() || auth()->user()->rol !== 'admin') {

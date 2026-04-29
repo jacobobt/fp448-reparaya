@@ -19,6 +19,10 @@
         <a href="{{ route('admin.especialidades.index') }}">Gestionar especialidades</a>
     </p>
 
+    <p>
+        <a href="{{ route('admin.tecnicos.index') }}">Gestionar técnicos</a>
+    </p>
+
     <h2>Resumen</h2>
 
     <ul>
