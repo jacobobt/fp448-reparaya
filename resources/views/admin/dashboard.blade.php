@@ -15,6 +15,10 @@
         <a href="{{ route('admin.incidencias.index') }}">Gestionar incidencias</a>
     </p>
 
+    <p>
+        <a href="{{ route('admin.especialidades.index') }}">Gestionar especialidades</a>
+    </p>
+
     <h2>Resumen</h2>
 
     <ul>

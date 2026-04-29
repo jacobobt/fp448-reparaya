@@ -28,4 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/admin/incidencias/{incidencia}/estado', [AdminController::class, 'cambiarEstado'])->name('admin.incidencias.estado');
 
     Route::patch('/admin/incidencias/{incidencia}/asignar', [AdminController::class, 'asignarTecnico'])->name('admin.incidencias.asignar');
+
+    Route::get('/admin/especialidades', [AdminController::class, 'especialidades'])->name('admin.especialidades.index');
+    Route::get('/admin/especialidades/nueva', [AdminController::class, 'crearEspecialidad'])->name('admin.especialidades.create');
+    Route::post('/admin/especialidades', [AdminController::class, 'guardarEspecialidad'])->name('admin.especialidades.store');
+    Route::get('/admin/especialidades/{especialidad}/editar', [AdminController::class, 'editarEspecialidad'])->name('admin.especialidades.edit');
+    Route::patch('/admin/especialidades/{especialidad}', [AdminController::class, 'actualizarEspecialidad'])->name('admin.especialidades.update');
 });

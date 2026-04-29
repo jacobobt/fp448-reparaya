@@ -75,6 +75,61 @@ class AdminController extends Controller
         return back()->with('success', 'Técnico asignado correctamente.');
     }
 
+    public function especialidades()
+        {
+            $this->autorizarAdmin();
+
+            $especialidades = Especialidad::orderBy('nombre_especialidad')->get();
+
+            return view('admin.especialidades.index', compact('especialidades'));
+    }
+
+    public function crearEspecialidad()
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.especialidades.create');
+    }
+
+    public function guardarEspecialidad(Request $request)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre_especialidad' => ['required', 'string', 'max:50'],
+            'precio' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        Especialidad::create($datos);
+
+        return redirect()
+         ->route('admin.especialidades.index')
+         ->with('success', 'Especialidad creada correctamente.');
+    }
+
+    public function editarEspecialidad(Especialidad $especialidad)
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.especialidades.edit', compact('especialidad'));
+    }
+
+    public function actualizarEspecialidad(Request $request, Especialidad $especialidad)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre_especialidad' => ['required', 'string', 'max:50'],
+            'precio' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        $especialidad->update($datos);
+
+        return redirect()
+            ->route('admin.especialidades.index')
+            ->with('success', 'Especialidad actualizada correctamente.');
+    }
+
     private function autorizarAdmin(): void
     {
         if (!auth()->check() || auth()->user()->rol !== 'admin') {
