@@ -22,6 +22,13 @@ class Usuario extends Authenticatable
         'password',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
+
     public function incidencias()
     {
         return $this->hasMany(Incidencia::class, 'cliente_id');
