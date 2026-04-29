@@ -92,7 +92,7 @@
             <span>Hola, {{ auth()->user()->nombre }} ({{ auth()->user()->rol }})</span>
 
             @if (auth()->user()->rol === 'admin')
-                <a href="#">Panel administrador</a>
+                <a href="{{ route('admin.dashboard') }}">Panel administrador</a>
             @endif
 
             @if (auth()->user()->rol === 'tecnico')

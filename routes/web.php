@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IncidenciaController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -20,4 +21,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/avisos/nuevo', [IncidenciaController::class, 'create'])->name('incidencias.create');
     Route::post('/avisos', [IncidenciaController::class, 'store'])->name('incidencias.store');
     Route::patch('/avisos/{incidencia}/cancelar', [IncidenciaController::class, 'cancelar'])->name('incidencias.cancelar');
+    
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
