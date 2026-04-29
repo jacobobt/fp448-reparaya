@@ -41,7 +41,32 @@
                 <td>{{ $incidencia->direccion }}</td>
                 <td>{{ $incidencia->fecha_servicio->format('d/m/Y H:i') }}</td>
                 <td>{{ $incidencia->tipo_urgencia }}</td>
-                <td>{{ $incidencia->tecnico->nombre_completo ?? 'Sin asignar' }}</td>
+                
+                <td>
+                    <div>
+                        {{ $incidencia->tecnico->nombre_completo ?? 'Sin asignar' }}
+                    </div>
+
+                    <form method="POST" action="{{ route('admin.incidencias.asignar', $incidencia) }}">
+                        @csrf
+                        @method('PATCH')
+
+                        <select name="tecnico_id" required>
+                            <option value="">Seleccionar técnico</option>
+                            @foreach ($tecnicos as $tecnico)
+                                <option value="{{ $tecnico->id }}" @selected($incidencia->tecnico_id === $tecnico->id)>
+                                    {{ $tecnico->nombre_completo }}
+                                    @if ($tecnico->especialidad)
+                                        - {{ $tecnico->especialidad->nombre_especialidad }}
+                                    @endif
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <button type="submit">Asignar</button>
+                    </form>
+                </td>
+
                 <td>{{ $incidencia->estado }}</td>
                 <td>
                     <form method="POST" action="{{ route('admin.incidencias.estado', $incidencia) }}">

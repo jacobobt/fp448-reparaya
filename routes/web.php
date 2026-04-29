@@ -26,4 +26,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/incidencias', [AdminController::class, 'incidencias'])->name('admin.incidencias.index');
     Route::patch('/admin/incidencias/{incidencia}/estado', [AdminController::class, 'cambiarEstado'])->name('admin.incidencias.estado');
+
+    Route::patch('/admin/incidencias/{incidencia}/asignar', [AdminController::class, 'asignarTecnico'])->name('admin.incidencias.asignar');
 });

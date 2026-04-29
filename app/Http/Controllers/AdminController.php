@@ -33,10 +33,15 @@ class AdminController extends Controller
         $this->autorizarAdmin();
 
         $incidencias = Incidencia::with(['cliente', 'especialidad', 'tecnico'])
-          ->latest('created_at')
-          ->get();
+            ->latest('created_at')
+            ->get();
 
-        return view('admin.incidencias.index', compact('incidencias'));
+        $tecnicos = Tecnico::with('especialidad')
+            ->where('disponible', true)
+            ->orderBy('nombre_completo')
+            ->get();
+
+        return view('admin.incidencias.index', compact('incidencias', 'tecnicos'));
     }
 
     public function cambiarEstado(Request $request, Incidencia $incidencia)
@@ -52,6 +57,22 @@ class AdminController extends Controller
         ]);
 
         return back()->with('success', 'Estado actualizado correctamente.');
+    }
+
+    public function asignarTecnico(Request $request, Incidencia $incidencia)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'tecnico_id' => ['required', 'exists:tecnicos,id'],
+        ]);
+
+        $incidencia->update([
+            'tecnico_id' => $datos['tecnico_id'],
+            'estado' => $incidencia->estado === 'Pendiente' ? 'Asignada' : $incidencia->estado,
+        ]);
+
+        return back()->with('success', 'Técnico asignado correctamente.');
     }
 
     private function autorizarAdmin(): void
