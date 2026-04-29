@@ -96,7 +96,7 @@
             @endif
 
             @if (auth()->user()->rol === 'tecnico')
-                <a href="#">Mi agenda</a>
+                <a href="{{ route('tecnico.agenda') }}">Mi agenda</a>
             @endif
 
             @if (auth()->user()->rol === 'particular')

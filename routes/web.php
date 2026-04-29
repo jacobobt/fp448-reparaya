@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TecnicoPanelController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -41,4 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/tecnicos/{tecnico}/editar', [AdminController::class, 'editarTecnico'])->name('admin.tecnicos.edit');
     Route::patch('/admin/tecnicos/{tecnico}', [AdminController::class, 'actualizarTecnico'])->name('admin.tecnicos.update');
     Route::patch('/admin/tecnicos/{tecnico}/disponibilidad', [AdminController::class, 'cambiarDisponibilidadTecnico'])->name('admin.tecnicos.disponibilidad');
+
+    Route::get('/tecnico/agenda', [TecnicoPanelController::class, 'agenda'])->name('tecnico.agenda');
+    Route::patch('/tecnico/incidencias/{incidencia}/finalizar', [TecnicoPanelController::class, 'finalizar'])->name('tecnico.incidencias.finalizar');
 });
