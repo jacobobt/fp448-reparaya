@@ -1,16 +1,4 @@
 services:
-  web:
-    build: .
-    container_name: reparaya_web
-    ports:
-      - "8080:80"
-    volumes:
-      - ./public:/var/www/html
-      - ./app:/var/www/app
-      - ./config:/var/www/config
-    depends_on:
-      - db
-
   db:
     image: mysql:8.0
     container_name: reparaya_db
@@ -25,7 +13,20 @@ services:
       - "3308:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./sql:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: reparaya_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - db
 
 volumes:
   db_data:
+  
