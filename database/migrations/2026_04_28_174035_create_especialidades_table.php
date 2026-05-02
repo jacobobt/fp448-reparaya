@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_especialidad', 50);
             $table->decimal('precio', 10, 2)->default(0);
+            $table->timestamps();
         });
     }
 
