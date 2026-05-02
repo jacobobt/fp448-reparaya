@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre', 100);
             $table->string('email', 100)->unique();
             $table->string('password');
-            $table->enum('rol', ['admin', 'tecnico', 'particular'])->default('particular');
+            $table->enum('rol', ['admin', 'tecnico', 'particular','gestora'])->default('particular');
             $table->string('telefono', 20)->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();
         });

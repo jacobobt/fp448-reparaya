@@ -11,19 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('especialidades', function (Blueprint $table) {
+        Schema::create('gestoras', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_especialidad', 50);
-            $table->decimal('precio', 10, 2)->default(0);
+
+            $table->string('nombre');
+
+            $table->decimal('comision_porcentaje', 5, 2)->default(5);
+
             $table->timestamps();
         });
-    }
+    }   
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('especialidades');
+        Schema::dropIfExists('gestoras');
     }
 };
