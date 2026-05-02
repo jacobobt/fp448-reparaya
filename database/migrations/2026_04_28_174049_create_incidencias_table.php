@@ -24,6 +24,10 @@ return new class extends Migration
             $table->dateTime('fecha_servicio');
             $table->enum('tipo_urgencia', ['Estandar', 'Urgente'])->default('Estandar');
             $table->enum('estado', ['Pendiente', 'Asignada', 'Finalizada', 'Cancelada'])->default('Pendiente');
+            $table->foreignId('gestora_id')->nullable()->constrained('gestoras');
+            $table->decimal('precio_final', 10, 2)->nullable();
+            $table->decimal('comision_gestora', 10, 2)->nullable();
+            $table->foreignId('zona_id')->constrained()->cascadeOnDelete();
             $table->timestamp('created_at')->nullable()->useCurrent();
         });
     }
