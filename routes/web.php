@@ -51,4 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/gestoras', [AdminController::class, 'guardarGestora'])->name('admin.gestoras.store');
     Route::get('/admin/gestoras/{gestora}/editar', [AdminController::class, 'editarGestora'])->name('admin.gestoras.edit');
     Route::patch('/admin/gestoras/{gestora}', [AdminController::class, 'actualizarGestora'])->name('admin.gestoras.update');
+
+    Route::get('/admin/zonas', [AdminController::class, 'zonas'])->name('admin.zonas.index');
+    Route::get('/admin/zonas/nueva', [AdminController::class, 'crearZona'])->name('admin.zonas.create');
+    Route::post('/admin/zonas', [AdminController::class, 'guardarZona'])->name('admin.zonas.store');
+    Route::get('/admin/zonas/{zona}/editar', [AdminController::class, 'editarZona'])->name('admin.zonas.edit');
+    Route::patch('/admin/zonas/{zona}', [AdminController::class, 'actualizarZona'])->name('admin.zonas.update');
 });

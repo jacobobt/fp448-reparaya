@@ -8,6 +8,7 @@ use App\Models\Usuario;
 use App\Models\Especialidad;
 use Illuminate\Http\Request;
 use App\Models\Gestora;
+use App\Models\Zona;
 
 class AdminController extends Controller
 {
@@ -273,6 +274,59 @@ class AdminController extends Controller
         return redirect()
             ->route('admin.gestoras.index')
             ->with('success', 'Gestora actualizada correctamente.');
+    }
+
+    public function zonas()
+    {
+        $this->autorizarAdmin();
+
+        $zonas = Zona::orderBy('nombre')->get();
+
+        return view('admin.zonas.index', compact('zonas'));
+    }
+
+    public function crearZona()
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.zonas.create');
+    }
+
+    public function guardarZona(Request $request)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+        ]);
+
+        Zona::create($datos);
+
+        return redirect()
+            ->route('admin.zonas.index')
+            ->with('success', 'Zona creada correctamente.');
+    }
+
+    public function editarZona(Zona $zona)
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.zonas.edit', compact('zona'));
+    }
+
+    public function actualizarZona(Request $request, Zona $zona)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+        ]);
+
+        $zona->update($datos);
+
+        return redirect()
+            ->route('admin.zonas.index')
+            ->with('success', 'Zona actualizada correctamente.');
     }
 
     private function autorizarAdmin(): void
