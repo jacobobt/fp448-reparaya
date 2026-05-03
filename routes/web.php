@@ -70,4 +70,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/gestora/avisos/nuevo', [GestoraPanelController::class, 'crearAviso'])->name('gestora.avisos.create');
     Route::post('/gestora/avisos', [GestoraPanelController::class, 'guardarAviso'])->name('gestora.avisos.store');
+
+    Route::get('/admin/liquidaciones', [AdminController::class, 'liquidaciones'])->name('admin.liquidaciones.index');
 });

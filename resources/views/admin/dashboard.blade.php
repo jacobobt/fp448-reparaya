@@ -12,6 +12,7 @@
         <a class="button" href="{{ route('admin.gestoras.index') }}">Gestionar gestoras</a>
         <a class="button" href="{{ route('admin.zonas.index') }}">Gestionar zonas</a>
         <a class="button" href="{{ route('admin.comunidades.index') }}">Gestionar comunidades</a>
+        <a class="button" href="{{ route('admin.liquidaciones.index') }}">Liquidaciones</a>
     </div>
 
     <section class="stats">

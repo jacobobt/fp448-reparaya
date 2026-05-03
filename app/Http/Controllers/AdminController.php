@@ -397,6 +397,25 @@ class AdminController extends Controller
             ->with('success', 'Comunidad actualizada correctamente.');
     }
 
+    public function liquidaciones()
+    {
+        $this->autorizarAdmin();
+
+        $liquidaciones = Incidencia::with('gestora')
+            ->whereNotNull('gestora_id')
+            ->where('estado', 'Finalizada')
+            ->selectRaw('gestora_id')
+            ->selectRaw("DATE_FORMAT(fecha_servicio, '%Y-%m') as mes")
+            ->selectRaw('COUNT(*) as total_servicios')
+            ->selectRaw('SUM(precio_final) as total_facturado')
+            ->selectRaw('SUM(comision_gestora) as total_comision')
+            ->groupBy('gestora_id', 'mes')
+            ->orderByDesc('mes')
+            ->get();
+
+        return view('admin.liquidaciones.index', compact('liquidaciones'));
+    }
+
     private function autorizarAdmin(): void
     {
         if (!auth()->check() || auth()->user()->rol !== 'admin') {
