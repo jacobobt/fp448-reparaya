@@ -9,6 +9,7 @@ use App\Models\Especialidad;
 use Illuminate\Http\Request;
 use App\Models\Gestora;
 use App\Models\Zona;
+use App\Models\Comunidad;
 
 class AdminController extends Controller
 {
@@ -327,6 +328,73 @@ class AdminController extends Controller
         return redirect()
             ->route('admin.zonas.index')
             ->with('success', 'Zona actualizada correctamente.');
+    }
+
+    public function comunidades()
+    {
+        $this->autorizarAdmin();
+
+        $comunidades = Comunidad::with(['gestora', 'zona'])
+            ->orderBy('nombre')
+            ->get();
+
+        return view('admin.comunidades.index', compact('comunidades'));
+    }
+
+    public function crearComunidad()
+    {
+        $this->autorizarAdmin();
+
+        $gestoras = Gestora::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->get();
+
+        return view('admin.comunidades.create', compact('gestoras', 'zonas'));
+    }
+
+    public function guardarComunidad(Request $request)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'gestora_id' => ['required', 'exists:gestoras,id'],
+            'zona_id' => ['required', 'exists:zonas,id'],
+            'nombre' => ['required', 'string', 'max:255'],
+            'direccion' => ['required', 'string', 'max:255'],
+        ]);
+
+        Comunidad::create($datos);
+
+        return redirect()
+            ->route('admin.comunidades.index')
+            ->with('success', 'Comunidad creada correctamente.');
+    }
+
+    public function editarComunidad(Comunidad $comunidad)
+    {
+        $this->autorizarAdmin();
+
+        $gestoras = Gestora::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->get();
+
+        return view('admin.comunidades.edit', compact('comunidad', 'gestoras', 'zonas'));
+    }
+
+    public function actualizarComunidad(Request $request, Comunidad $comunidad)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'gestora_id' => ['required', 'exists:gestoras,id'],
+            'zona_id' => ['required', 'exists:zonas,id'],
+            'nombre' => ['required', 'string', 'max:255'],
+            'direccion' => ['required', 'string', 'max:255'],
+        ]);
+
+        $comunidad->update($datos);
+
+        return redirect()
+            ->route('admin.comunidades.index')
+            ->with('success', 'Comunidad actualizada correctamente.');
     }
 
     private function autorizarAdmin(): void

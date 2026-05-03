@@ -57,4 +57,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/zonas', [AdminController::class, 'guardarZona'])->name('admin.zonas.store');
     Route::get('/admin/zonas/{zona}/editar', [AdminController::class, 'editarZona'])->name('admin.zonas.edit');
     Route::patch('/admin/zonas/{zona}', [AdminController::class, 'actualizarZona'])->name('admin.zonas.update');
+
+    Route::get('/admin/comunidades', [AdminController::class, 'comunidades'])->name('admin.comunidades.index');
+    Route::get('/admin/comunidades/nueva', [AdminController::class, 'crearComunidad'])->name('admin.comunidades.create');
+    Route::post('/admin/comunidades', [AdminController::class, 'guardarComunidad'])->name('admin.comunidades.store');
+    Route::get('/admin/comunidades/{comunidad}/editar', [AdminController::class, 'editarComunidad'])->name('admin.comunidades.edit');
+    Route::patch('/admin/comunidades/{comunidad}', [AdminController::class, 'actualizarComunidad'])->name('admin.comunidades.update');
 });
