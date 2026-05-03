@@ -67,4 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/admin/comunidades/{comunidad}', [AdminController::class, 'actualizarComunidad'])->name('admin.comunidades.update');
 
     Route::get('/gestora', [GestoraPanelController::class, 'dashboard'])->name('gestora.dashboard');
+
+    Route::get('/gestora/avisos/nuevo', [GestoraPanelController::class, 'crearAviso'])->name('gestora.avisos.create');
+    Route::post('/gestora/avisos', [GestoraPanelController::class, 'guardarAviso'])->name('gestora.avisos.store');
 });

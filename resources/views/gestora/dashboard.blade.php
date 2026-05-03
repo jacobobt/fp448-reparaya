@@ -5,6 +5,10 @@
 @section('content')
     <h1>Panel gestora</h1>
 
+    <div class="actions">
+        <a class="button" href="{{ route('gestora.avisos.create') }}">Nuevo aviso</a>
+    </div>
+
     <p>
         Gestora: {{ $gestora->nombre }}
         - Comisión: {{ number_format($gestora->comision_porcentaje, 2) }} %
