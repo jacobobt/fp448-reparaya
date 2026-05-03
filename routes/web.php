@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TecnicoPanelController;
+use App\Http\Controllers\GestoraPanelController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -63,4 +65,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/comunidades', [AdminController::class, 'guardarComunidad'])->name('admin.comunidades.store');
     Route::get('/admin/comunidades/{comunidad}/editar', [AdminController::class, 'editarComunidad'])->name('admin.comunidades.edit');
     Route::patch('/admin/comunidades/{comunidad}', [AdminController::class, 'actualizarComunidad'])->name('admin.comunidades.update');
+
+    Route::get('/gestora', [GestoraPanelController::class, 'dashboard'])->name('gestora.dashboard');
 });

@@ -57,5 +57,14 @@ class UsuarioSeeder extends Seeder
             'rol' => 'particular',
             'telefono' => '616166116',
         ]);
+
+        Usuario::create([
+            'nombre' => 'Gestora Mediterraneo',
+            'email' => 'gestora@reparaya.edu',
+            'password' => Hash::make('1234'),
+            'rol' => 'gestora',
+            'telefono' => '933445566',
+            'gestora_id' => 1,
+        ]);
     }
 }

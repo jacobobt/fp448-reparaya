@@ -16,6 +16,7 @@ class Usuario extends Authenticatable
         'password',
         'rol',
         'telefono',
+        'gestora_id',
     ];
 
     protected $hidden = [
@@ -37,5 +38,10 @@ class Usuario extends Authenticatable
     public function tecnico()
     {
         return $this->hasOne(Tecnico::class, 'usuario_id');
+    }
+
+    public function gestora()
+    {
+        return $this->belongsTo(Gestora::class);
     }
 }

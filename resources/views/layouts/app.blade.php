@@ -162,6 +162,10 @@
                 <a href="{{ route('incidencias.create') }}">Nuevo aviso</a>
             @endif
 
+            @if (auth()->user()->rol === 'gestora')
+                <a href="{{ route('gestora.dashboard') }}">Panel gestora</a>
+            @endif
+
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit">Cerrar sesión</button>
