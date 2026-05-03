@@ -45,4 +45,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/tecnico/agenda', [TecnicoPanelController::class, 'agenda'])->name('tecnico.agenda');
     Route::patch('/tecnico/incidencias/{incidencia}/finalizar', [TecnicoPanelController::class, 'finalizar'])->name('tecnico.incidencias.finalizar');
+    
+    Route::get('/admin/gestoras', [AdminController::class, 'gestoras'])->name('admin.gestoras.index');
+    Route::get('/admin/gestoras/nueva', [AdminController::class, 'crearGestora'])->name('admin.gestoras.create');
+    Route::post('/admin/gestoras', [AdminController::class, 'guardarGestora'])->name('admin.gestoras.store');
+    Route::get('/admin/gestoras/{gestora}/editar', [AdminController::class, 'editarGestora'])->name('admin.gestoras.edit');
+    Route::patch('/admin/gestoras/{gestora}', [AdminController::class, 'actualizarGestora'])->name('admin.gestoras.update');
 });

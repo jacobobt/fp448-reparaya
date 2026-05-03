@@ -7,6 +7,7 @@ use App\Models\Tecnico;
 use App\Models\Usuario;
 use App\Models\Especialidad;
 use Illuminate\Http\Request;
+use App\Models\Gestora;
 
 class AdminController extends Controller
 {
@@ -130,9 +131,6 @@ class AdminController extends Controller
             ->with('success', 'Especialidad actualizada correctamente.');
     }
 
-
-
-
     public function tecnicos()
     {
         $this->autorizarAdmin();
@@ -220,6 +218,61 @@ class AdminController extends Controller
         ]);
 
         return back()->with('success', 'Disponibilidad actualizada correctamente.');
+    }
+
+    public function gestoras()
+    {
+        $this->autorizarAdmin();
+
+        $gestoras = Gestora::orderBy('nombre')->get();
+
+        return view('admin.gestoras.index', compact('gestoras'));
+    }
+
+    public function crearGestora()
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.gestoras.create');
+    }
+
+    public function guardarGestora(Request $request)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+            'comision_porcentaje' => ['required', 'numeric', 'min:0', 'max:100'],
+        ]);
+
+        Gestora::create($datos);
+
+        return redirect()
+            ->route('admin.gestoras.index')
+            ->with('success', 'Gestora creada correctamente.');
+    }
+
+    public function editarGestora(Gestora $gestora)
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.gestoras.edit', compact('gestora'));
+    }
+
+    public function actualizarGestora(Request $request, Gestora $gestora)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+            'comision_porcentaje' => ['required', 'numeric', 'min:0', 'max:100'],
+        ]);
+
+        $gestora->update($datos);
+
+        return redirect()
+            ->route('admin.gestoras.index')
+            ->with('success', 'Gestora actualizada correctamente.');
     }
 
     private function autorizarAdmin(): void
