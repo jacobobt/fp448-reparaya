@@ -7,6 +7,7 @@
 
     <div class="actions">
         <a class="button" href="{{ route('gestora.avisos.create') }}">Nuevo aviso</a>
+        <a class="button" href="{{ route('gestora.liquidaciones.index') }}">Mis liquidaciones</a>
     </div>
 
     <p>

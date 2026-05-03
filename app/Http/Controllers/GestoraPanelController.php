@@ -110,6 +110,37 @@ class GestoraPanelController extends Controller
             ->with('success', 'Aviso creado correctamente.');
     }
 
+    public function liquidaciones()
+    {
+        if (!Auth::check() || Auth::user()->rol !== 'gestora') {
+            abort(403);
+        }
+
+        $gestora = Auth::user()->gestora;
+
+        if (!$gestora) {
+            abort(403, 'Este usuario no tiene gestora asociada.');
+        }
+
+        $liquidaciones = Incidencia::where('gestora_id', $gestora->id)
+            ->where('estado', 'Finalizada')
+            ->selectRaw("DATE_FORMAT(fecha_servicio, '%Y-%m') as mes")
+            ->selectRaw('COUNT(*) as total_servicios')
+            ->selectRaw('SUM(precio_final) as total_facturado')
+            ->selectRaw('SUM(comision_gestora) as total_comision')
+            ->groupBy('mes')
+            ->orderByDesc('mes')
+            ->get();
+
+        $servicios = Incidencia::with(['comunidad', 'zona', 'especialidad', 'tecnico'])
+            ->where('gestora_id', $gestora->id)
+            ->where('estado', 'Finalizada')
+            ->orderByDesc('fecha_servicio')
+            ->get();
+
+        return view('gestora.liquidaciones.index', compact('gestora', 'liquidaciones', 'servicios'));
+    }
+
     private function generarLocalizador(): string
     {
         $anio = now()->format('Y');

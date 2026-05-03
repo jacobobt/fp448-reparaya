@@ -72,4 +72,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/gestora/avisos', [GestoraPanelController::class, 'guardarAviso'])->name('gestora.avisos.store');
 
     Route::get('/admin/liquidaciones', [AdminController::class, 'liquidaciones'])->name('admin.liquidaciones.index');
+
+    Route::get('/gestora/liquidaciones', [GestoraPanelController::class, 'liquidaciones'])->name('gestora.liquidaciones.index');
 });
