@@ -12,6 +12,8 @@ class DatabaseSeeder extends Seeder
             EspecialidadSeeder::class,
             UsuarioSeeder::class,
             TecnicoSeeder::class,
+            GestoraSeeder::class,
+            ZonaSeeder::class,
             IncidenciaSeeder::class,
         ]);
     }
