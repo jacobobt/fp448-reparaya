@@ -23,6 +23,7 @@ class Incidencia extends Model
         'tipo_urgencia',
         'estado',
         'gestora_id',
+        'comunidad_id',
         'precio_final',
         'comision_gestora',
         'zona_id',
@@ -55,5 +56,10 @@ class Incidencia extends Model
     public function zona()
     {
         return $this->belongsTo(Zona::class);
+    }
+
+    public function comunidad()
+    {
+        return $this->belongsTo(Comunidad::class);
     }
 }

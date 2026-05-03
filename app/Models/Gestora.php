@@ -22,4 +22,9 @@ class Gestora extends Model
     {
         return $this->hasMany(Liquidacion::class);
     }
+
+    public function comunidades()
+    {
+        return $this->hasMany(Comunidad::class);
+    }
 }

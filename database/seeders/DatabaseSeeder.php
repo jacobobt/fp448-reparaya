@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             TecnicoSeeder::class,
             GestoraSeeder::class,
             ZonaSeeder::class,
+            ComunidadSeeder::class,
             IncidenciaSeeder::class,
         ]);
     }

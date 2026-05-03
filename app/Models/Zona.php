@@ -16,4 +16,9 @@ class Zona extends Model
     {
         return $this->hasMany(Incidencia::class);
     }
+
+    public function comunidades()
+    {
+        return $this->hasMany(Comunidad::class);
+    }
 }
