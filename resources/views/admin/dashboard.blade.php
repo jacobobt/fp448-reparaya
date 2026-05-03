@@ -9,6 +9,10 @@
         <a class="button" href="{{ route('admin.incidencias.index') }}">Gestionar incidencias</a>
         <a class="button" href="{{ route('admin.especialidades.index') }}">Gestionar especialidades</a>
         <a class="button" href="{{ route('admin.tecnicos.index') }}">Gestionar técnicos</a>
+        <a class="button" href="{{ route('admin.gestoras.index') }}">Gestionar gestoras</a>
+        <a class="button" href="{{ route('admin.zonas.index') }}">Gestionar zonas</a>
+        <a class="button" href="{{ route('admin.comunidades.index') }}">Gestionar comunidades</a>
+        <a class="button" href="{{ route('admin.liquidaciones.index') }}">Liquidaciones</a>
     </div>
 
     <section class="stats">

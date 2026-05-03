@@ -7,6 +7,9 @@ use App\Models\Tecnico;
 use App\Models\Usuario;
 use App\Models\Especialidad;
 use Illuminate\Http\Request;
+use App\Models\Gestora;
+use App\Models\Zona;
+use App\Models\Comunidad;
 
 class AdminController extends Controller
 {
@@ -130,9 +133,6 @@ class AdminController extends Controller
             ->with('success', 'Especialidad actualizada correctamente.');
     }
 
-
-
-
     public function tecnicos()
     {
         $this->autorizarAdmin();
@@ -220,6 +220,200 @@ class AdminController extends Controller
         ]);
 
         return back()->with('success', 'Disponibilidad actualizada correctamente.');
+    }
+
+    public function gestoras()
+    {
+        $this->autorizarAdmin();
+
+        $gestoras = Gestora::orderBy('nombre')->get();
+
+        return view('admin.gestoras.index', compact('gestoras'));
+    }
+
+    public function crearGestora()
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.gestoras.create');
+    }
+
+    public function guardarGestora(Request $request)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+            'comision_porcentaje' => ['required', 'numeric', 'min:0', 'max:100'],
+        ]);
+
+        Gestora::create($datos);
+
+        return redirect()
+            ->route('admin.gestoras.index')
+            ->with('success', 'Gestora creada correctamente.');
+    }
+
+    public function editarGestora(Gestora $gestora)
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.gestoras.edit', compact('gestora'));
+    }
+
+    public function actualizarGestora(Request $request, Gestora $gestora)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+            'comision_porcentaje' => ['required', 'numeric', 'min:0', 'max:100'],
+        ]);
+
+        $gestora->update($datos);
+
+        return redirect()
+            ->route('admin.gestoras.index')
+            ->with('success', 'Gestora actualizada correctamente.');
+    }
+
+    public function zonas()
+    {
+        $this->autorizarAdmin();
+
+        $zonas = Zona::orderBy('nombre')->get();
+
+        return view('admin.zonas.index', compact('zonas'));
+    }
+
+    public function crearZona()
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.zonas.create');
+    }
+
+    public function guardarZona(Request $request)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+        ]);
+
+        Zona::create($datos);
+
+        return redirect()
+            ->route('admin.zonas.index')
+            ->with('success', 'Zona creada correctamente.');
+    }
+
+    public function editarZona(Zona $zona)
+    {
+        $this->autorizarAdmin();
+
+        return view('admin.zonas.edit', compact('zona'));
+    }
+
+    public function actualizarZona(Request $request, Zona $zona)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+        ]);
+
+        $zona->update($datos);
+
+        return redirect()
+            ->route('admin.zonas.index')
+            ->with('success', 'Zona actualizada correctamente.');
+    }
+
+    public function comunidades()
+    {
+        $this->autorizarAdmin();
+
+        $comunidades = Comunidad::with(['gestora', 'zona'])
+            ->orderBy('nombre')
+            ->get();
+
+        return view('admin.comunidades.index', compact('comunidades'));
+    }
+
+    public function crearComunidad()
+    {
+        $this->autorizarAdmin();
+
+        $gestoras = Gestora::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->get();
+
+        return view('admin.comunidades.create', compact('gestoras', 'zonas'));
+    }
+
+    public function guardarComunidad(Request $request)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'gestora_id' => ['required', 'exists:gestoras,id'],
+            'zona_id' => ['required', 'exists:zonas,id'],
+            'nombre' => ['required', 'string', 'max:255'],
+            'direccion' => ['required', 'string', 'max:255'],
+        ]);
+
+        Comunidad::create($datos);
+
+        return redirect()
+            ->route('admin.comunidades.index')
+            ->with('success', 'Comunidad creada correctamente.');
+    }
+
+    public function editarComunidad(Comunidad $comunidad)
+    {
+        $this->autorizarAdmin();
+
+        $gestoras = Gestora::orderBy('nombre')->get();
+        $zonas = Zona::orderBy('nombre')->get();
+
+        return view('admin.comunidades.edit', compact('comunidad', 'gestoras', 'zonas'));
+    }
+
+    public function actualizarComunidad(Request $request, Comunidad $comunidad)
+    {
+        $this->autorizarAdmin();
+
+        $datos = $request->validate([
+            'gestora_id' => ['required', 'exists:gestoras,id'],
+            'zona_id' => ['required', 'exists:zonas,id'],
+            'nombre' => ['required', 'string', 'max:255'],
+            'direccion' => ['required', 'string', 'max:255'],
+        ]);
+
+        $comunidad->update($datos);
+
+        return redirect()
+            ->route('admin.comunidades.index')
+            ->with('success', 'Comunidad actualizada correctamente.');
+    }
+
+    public function liquidaciones()
+    {
+        $this->autorizarAdmin();
+
+        $liquidaciones = Incidencia::with('gestora')
+            ->whereNotNull('gestora_id')
+            ->where('estado', 'Finalizada')
+            ->selectRaw('gestora_id')
+            ->selectRaw("DATE_FORMAT(fecha_servicio, '%Y-%m') as mes")
+            ->selectRaw('COUNT(*) as total_servicios')
+            ->selectRaw('SUM(precio_final) as total_facturado')
+            ->selectRaw('SUM(comision_gestora) as total_comision')
+            ->groupBy('gestora_id', 'mes')
+            ->orderByDesc('mes')
+            ->get();
+
+        return view('admin.liquidaciones.index', compact('liquidaciones'));
     }
 
     private function autorizarAdmin(): void

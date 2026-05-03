@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TecnicoPanelController;
+use App\Http\Controllers\GestoraPanelController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -45,4 +47,31 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/tecnico/agenda', [TecnicoPanelController::class, 'agenda'])->name('tecnico.agenda');
     Route::patch('/tecnico/incidencias/{incidencia}/finalizar', [TecnicoPanelController::class, 'finalizar'])->name('tecnico.incidencias.finalizar');
+    
+    Route::get('/admin/gestoras', [AdminController::class, 'gestoras'])->name('admin.gestoras.index');
+    Route::get('/admin/gestoras/nueva', [AdminController::class, 'crearGestora'])->name('admin.gestoras.create');
+    Route::post('/admin/gestoras', [AdminController::class, 'guardarGestora'])->name('admin.gestoras.store');
+    Route::get('/admin/gestoras/{gestora}/editar', [AdminController::class, 'editarGestora'])->name('admin.gestoras.edit');
+    Route::patch('/admin/gestoras/{gestora}', [AdminController::class, 'actualizarGestora'])->name('admin.gestoras.update');
+
+    Route::get('/admin/zonas', [AdminController::class, 'zonas'])->name('admin.zonas.index');
+    Route::get('/admin/zonas/nueva', [AdminController::class, 'crearZona'])->name('admin.zonas.create');
+    Route::post('/admin/zonas', [AdminController::class, 'guardarZona'])->name('admin.zonas.store');
+    Route::get('/admin/zonas/{zona}/editar', [AdminController::class, 'editarZona'])->name('admin.zonas.edit');
+    Route::patch('/admin/zonas/{zona}', [AdminController::class, 'actualizarZona'])->name('admin.zonas.update');
+
+    Route::get('/admin/comunidades', [AdminController::class, 'comunidades'])->name('admin.comunidades.index');
+    Route::get('/admin/comunidades/nueva', [AdminController::class, 'crearComunidad'])->name('admin.comunidades.create');
+    Route::post('/admin/comunidades', [AdminController::class, 'guardarComunidad'])->name('admin.comunidades.store');
+    Route::get('/admin/comunidades/{comunidad}/editar', [AdminController::class, 'editarComunidad'])->name('admin.comunidades.edit');
+    Route::patch('/admin/comunidades/{comunidad}', [AdminController::class, 'actualizarComunidad'])->name('admin.comunidades.update');
+
+    Route::get('/gestora', [GestoraPanelController::class, 'dashboard'])->name('gestora.dashboard');
+
+    Route::get('/gestora/avisos/nuevo', [GestoraPanelController::class, 'crearAviso'])->name('gestora.avisos.create');
+    Route::post('/gestora/avisos', [GestoraPanelController::class, 'guardarAviso'])->name('gestora.avisos.store');
+
+    Route::get('/admin/liquidaciones', [AdminController::class, 'liquidaciones'])->name('admin.liquidaciones.index');
+
+    Route::get('/gestora/liquidaciones', [GestoraPanelController::class, 'liquidaciones'])->name('gestora.liquidaciones.index');
 });

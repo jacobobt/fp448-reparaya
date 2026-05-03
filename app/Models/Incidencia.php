@@ -22,6 +22,11 @@ class Incidencia extends Model
         'fecha_servicio',
         'tipo_urgencia',
         'estado',
+        'gestora_id',
+        'comunidad_id',
+        'precio_final',
+        'comision_gestora',
+        'zona_id',
     ];
 
     protected $casts = [
@@ -41,5 +46,20 @@ class Incidencia extends Model
     public function especialidad()
     {
         return $this->belongsTo(Especialidad::class);
+    }
+
+    public function gestora()
+    {
+        return $this->belongsTo(Gestora::class);
+    }
+
+    public function zona()
+    {
+        return $this->belongsTo(Zona::class);
+    }
+
+    public function comunidad()
+    {
+        return $this->belongsTo(Comunidad::class);
     }
 }
