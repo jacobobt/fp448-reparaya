@@ -12,7 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Alias de middlewares de rol — se usan en routes/web.php
+        $middleware->alias([
+            'admin'   => \App\Http\Middleware\EsAdmin::class,
+            'gestora' => \App\Http\Middleware\EsGestora::class,
+            'tecnico' => \App\Http\Middleware\EsTecnico::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

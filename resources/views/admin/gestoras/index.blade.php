@@ -19,6 +19,8 @@
         <tr>
             <th>Nombre</th>
             <th>Comisión</th>
+            <th>Usuario de acceso</th>
+            <th>Comunidades</th>
             <th>Acciones</th>
         </tr>
         </thead>
@@ -28,12 +30,20 @@
                 <td>{{ $gestora->nombre }}</td>
                 <td>{{ number_format($gestora->comision_porcentaje, 2) }} %</td>
                 <td>
+                    @if ($gestora->usuarios->first())
+                        {{ $gestora->usuarios->first()->email }}
+                    @else
+                        <span style="color:#dc2626">Sin usuario</span>
+                    @endif
+                </td>
+                <td>{{ $gestora->comunidades_count }}</td>
+                <td>
                     <a href="{{ route('admin.gestoras.edit', $gestora) }}">Editar</a>
                 </td>
             </tr>
         @empty
             <tr>
-                <td colspan="3">No hay gestoras registradas.</td>
+                <td colspan="5">No hay gestoras registradas.</td>
             </tr>
         @endforelse
         </tbody>

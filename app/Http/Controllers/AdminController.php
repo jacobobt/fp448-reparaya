@@ -13,6 +13,7 @@ use App\Models\Comunidad;
 
 class AdminController extends Controller
 {
+    
     public function dashboard()
     {
         $this->autorizarAdmin();
@@ -31,21 +32,43 @@ class AdminController extends Controller
         ]);
     }
 
-    public function incidencias()
-    {
-        $this->autorizarAdmin();
-
-        $incidencias = Incidencia::with(['cliente', 'especialidad', 'tecnico'])
-            ->latest('created_at')
-            ->get();
-
-        $tecnicos = Tecnico::with('especialidad')
-            ->where('disponible', true)
-            ->orderBy('nombre_completo')
-            ->get();
-
-        return view('admin.incidencias.index', compact('incidencias', 'tecnicos'));
+    public function incidencias(Request $request)
+{
+    $this->autorizarAdmin();
+ 
+    $query = Incidencia::with(['cliente', 'especialidad', 'tecnico'])
+        ->latest('created_at');
+ 
+    // Búsqueda por texto libre
+    if ($q = $request->input('q')) {
+        $query->where(function ($sub) use ($q) {
+            $sub->where('localizador', 'like', "%{$q}%")
+                ->orWhere('direccion', 'like', "%{$q}%")
+                ->orWhereHas('cliente', fn($c) => $c->where('nombre', 'like', "%{$q}%"));
+        });
     }
+ 
+    // Filtro estado
+    if ($estado = $request->input('estado')) {
+        $query->where('estado', $estado);
+    }
+ 
+    // Filtro urgencia
+    if ($urgencia = $request->input('urgencia')) {
+        $query->where('tipo_urgencia', $urgencia);
+    }
+ 
+    // Filtro especialidad
+    if ($espId = $request->input('especialidad_id')) {
+        $query->where('especialidad_id', $espId);
+    }
+ 
+    $incidencias    = $query->paginate(15)->withQueryString();
+    $tecnicos       = Tecnico::with('especialidad')->where('disponible', true)->orderBy('nombre_completo')->get();
+    $especialidades = \App\Models\Especialidad::orderBy('nombre_especialidad')->get();
+ 
+    return view('admin.incidencias.index', compact('incidencias', 'tecnicos', 'especialidades'));
+}
 
     public function cambiarEstado(Request $request, Incidencia $incidencia)
     {
@@ -133,16 +156,36 @@ class AdminController extends Controller
             ->with('success', 'Especialidad actualizada correctamente.');
     }
 
-    public function tecnicos()
-    {
-        $this->autorizarAdmin();
-
-        $tecnicos = Tecnico::with(['usuario', 'especialidad'])
-            ->orderBy('nombre_completo')
-            ->get();
-
-        return view('admin.tecnicos.index', compact('tecnicos'));
+    public function tecnicos(Request $request)
+{
+    $this->autorizarAdmin();
+ 
+    $query = Tecnico::with(['usuario', 'especialidad'])
+        ->orderBy('nombre_completo');
+ 
+    // Búsqueda por texto libre
+    if ($q = $request->input('q')) {
+        $query->where(function ($sub) use ($q) {
+            $sub->where('nombre_completo', 'like', "%{$q}%")
+                ->orWhereHas('usuario', fn($u) => $u->where('email', 'like', "%{$q}%"));
+        });
     }
+ 
+    // Filtro especialidad
+    if ($espId = $request->input('especialidad_id')) {
+        $query->where('especialidad_id', $espId);
+    }
+ 
+    // Filtro disponibilidad
+    if ($request->input('disponible') !== null && $request->input('disponible') !== '') {
+        $query->where('disponible', (bool) $request->input('disponible'));
+    }
+ 
+    $tecnicos       = $query->paginate(20)->withQueryString();
+    $especialidades = \App\Models\Especialidad::orderBy('nombre_especialidad')->get();
+ 
+    return view('admin.tecnicos.index', compact('tecnicos', 'especialidades'));
+}
 
     public function crearTecnico()
     {
@@ -224,34 +267,52 @@ class AdminController extends Controller
 
     public function gestoras()
     {
-        $this->autorizarAdmin();
-
-        $gestoras = Gestora::orderBy('nombre')->get();
-
-        return view('admin.gestoras.index', compact('gestoras'));
+    $this->autorizarAdmin();
+ 
+    $gestoras = \App\Models\Gestora::withCount('comunidades')
+        ->with('usuarios')
+        ->orderBy('nombre')
+        ->get();
+ 
+    return view('admin.gestoras.index', compact('gestoras'));
     }
 
     public function crearGestora()
     {
-        $this->autorizarAdmin();
-
-        return view('admin.gestoras.create');
+    $this->autorizarAdmin();
+    return view('admin.gestoras.create');
     }
-
+ 
     public function guardarGestora(Request $request)
     {
-        $this->autorizarAdmin();
-
-        $datos = $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
-            'comision_porcentaje' => ['required', 'numeric', 'min:0', 'max:100'],
-        ]);
-
-        Gestora::create($datos);
-
-        return redirect()
-            ->route('admin.gestoras.index')
-            ->with('success', 'Gestora creada correctamente.');
+    $this->autorizarAdmin();
+ 
+    $request->validate([
+        'nombre'             => ['required', 'string', 'max:255'],
+        'comision_porcentaje'=> ['required', 'numeric', 'min:0', 'max:100'],
+        'usuario_nombre'     => ['required', 'string', 'max:255'],
+        'usuario_email'      => ['required', 'email', 'unique:usuarios,email'],
+        'usuario_password'   => ['required', 'string', 'min:8'],
+    ]);
+ 
+    // 1. Crear la gestora
+    $gestora = \App\Models\Gestora::create([
+        'nombre'              => $request->nombre,
+        'comision_porcentaje' => $request->comision_porcentaje,
+    ]);
+ 
+    // 2. Crear el usuario con rol gestora y asociarlo
+    \App\Models\Usuario::create([
+        'nombre'      => $request->usuario_nombre,
+        'email'       => $request->usuario_email,
+        'password'    => $request->usuario_password, // el cast 'hashed' lo encripta automáticamente
+        'rol'         => 'gestora',
+        'gestora_id'  => $gestora->id,
+    ]);
+ 
+    return redirect()
+        ->route('admin.gestoras.index')
+        ->with('success', 'Gestora y usuario creados correctamente.');
     }
 
     public function editarGestora(Gestora $gestora)
@@ -414,6 +475,17 @@ class AdminController extends Controller
             ->get();
 
         return view('admin.liquidaciones.index', compact('liquidaciones'));
+    }
+
+    public function calendario()
+    {
+    $this->autorizarAdmin();
+ 
+    $incidencias = Incidencia::with(['cliente', 'especialidad', 'tecnico'])
+        ->whereIn('estado', ['Pendiente', 'Asignada', 'Finalizada'])
+        ->get();
+ 
+    return view('admin.calendario', compact('incidencias'));
     }
 
     private function autorizarAdmin(): void

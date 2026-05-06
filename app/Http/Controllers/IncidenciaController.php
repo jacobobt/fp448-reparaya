@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Especialidad;
 use App\Models\Incidencia;
+use App\Models\Zona;
+use App\Services\IncidenciaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class IncidenciaController extends Controller
 {
+    public function __construct(private IncidenciaService $servicio)
+    {
+    }
+
     public function index()
     {
         $incidencias = Incidencia::with(['especialidad', 'tecnico'])
@@ -22,35 +28,38 @@ class IncidenciaController extends Controller
     public function create()
     {
         $especialidades = Especialidad::orderBy('nombre_especialidad')->get();
+        $zonas          = Zona::orderBy('nombre')->get();
 
-        return view('incidencias.create', compact('especialidades'));
+        return view('incidencias.create', compact('especialidades', 'zonas'));
     }
 
     public function store(Request $request)
     {
         $datos = $request->validate([
             'telefono_contacto' => ['required', 'string', 'max:20'],
-            'especialidad_id' => ['required', 'exists:especialidades,id'],
-            'descripcion' => ['required', 'string'],
-            'direccion' => ['required', 'string', 'max:255'],
-            'fecha_servicio' => ['required', 'date'],
-            'franja_horaria' => ['required', 'in:09:00-13:00,16:00-20:00'],
-            'tipo_urgencia' => ['required', 'in:Estandar,Urgente'],
+            'especialidad_id'   => ['required', 'exists:especialidades,id'],
+            'zona_id'           => ['required', 'exists:zonas,id'],
+            'descripcion'       => ['required', 'string'],
+            'direccion'         => ['required', 'string', 'max:255'],
+            'fecha_servicio'    => ['required', 'date'],
+            'franja_horaria'    => ['required', 'in:09:00-13:00,16:00-20:00'],
+            'tipo_urgencia'     => ['required', 'in:Estandar,Urgente'],
         ]);
 
         $fechaServicio = $datos['fecha_servicio'] . ' ' . substr($datos['franja_horaria'], 0, 5) . ':00';
 
         Incidencia::create([
-            'localizador' => $this->generarLocalizador(),
+            'localizador'       => $this->servicio->generarLocalizador(),
             'telefono_contacto' => $datos['telefono_contacto'],
-            'franja_horaria' => $datos['franja_horaria'],
-            'cliente_id' => Auth::id(),
-            'especialidad_id' => $datos['especialidad_id'],
-            'descripcion' => $datos['descripcion'],
-            'direccion' => $datos['direccion'],
-            'fecha_servicio' => $fechaServicio,
-            'tipo_urgencia' => $datos['tipo_urgencia'],
-            'estado' => 'Pendiente',
+            'franja_horaria'    => $datos['franja_horaria'],
+            'cliente_id'        => Auth::id(),
+            'especialidad_id'   => $datos['especialidad_id'],
+            'zona_id'           => $datos['zona_id'],
+            'descripcion'       => $datos['descripcion'],
+            'direccion'         => $datos['direccion'],
+            'fecha_servicio'    => $fechaServicio,
+            'tipo_urgencia'     => $datos['tipo_urgencia'],
+            'estado'            => 'Pendiente',
         ]);
 
         return redirect()
@@ -72,18 +81,8 @@ class IncidenciaController extends Controller
             return back()->with('error', 'No se puede cancelar una incidencia con menos de 48 horas de antelación.');
         }
 
-        $incidencia->update([
-            'estado' => 'Cancelada',
-        ]);
+        $incidencia->update(['estado' => 'Cancelada']);
 
         return back()->with('success', 'Incidencia cancelada correctamente.');
-    }
-
-    private function generarLocalizador(): string
-    {
-        $anio = now()->format('Y');
-        $numero = Incidencia::whereYear('created_at', $anio)->count() + 1;
-
-        return 'REP-' . $anio . '-' . str_pad($numero, 4, '0', STR_PAD_LEFT);
     }
 }

@@ -27,4 +27,9 @@ class Gestora extends Model
     {
         return $this->hasMany(Comunidad::class);
     }
+
+    public function usuarios()
+    {
+    return $this->hasMany(\App\Models\Usuario::class);
+    }
 }

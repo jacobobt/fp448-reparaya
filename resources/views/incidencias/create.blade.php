@@ -33,6 +33,16 @@
             @endforeach
         </select><br><br>
 
+        <label>Zona</label><br>
+        <select name="zona_id" required>
+            <option value="">Selecciona una zona</option>
+            @foreach ($zonas as $zona)
+                <option value="{{ $zona->id }}" @selected(old('zona_id') == $zona->id)>
+                    {{ $zona->nombre }}
+                </option>
+            @endforeach
+        </select><br><br>
+
         <label>Descripción</label><br>
         <textarea name="descripcion" required>{{ old('descripcion') }}</textarea><br><br>
 
