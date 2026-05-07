@@ -42,7 +42,7 @@ class IncidenciaSeeder extends Seeder
             'direccion' => 'Avenida buenas vibras 12, 5t, 3a',
             'fecha_servicio' => '2026-04-17 09:00:00',
             'tipo_urgencia' => 'Estandar',
-            'estado' => 'Asignada',
+            'estado' => 'Finalizada',
             'precio_final' => 30.00,
             'comision_gestora' => 3.00,
         ]);
