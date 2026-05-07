@@ -1,58 +1,263 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ReparaYa - Producto 3 Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicacion de gestion de reparaciones domesticas migrada a Laravel para el Producto 3 de FP.448. El proyecto adapta la aplicacion del Producto 2, desarrollada en PHP sin framework, a una estructura Laravel con rutas, controladores, modelos Eloquent, vistas Blade, migraciones y un Web Service REST.
 
-## About Laravel
+## Objetivo del producto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+El Producto 3 consiste en migrar ReparaYa a Laravel y ampliar el modelo de negocio con administradores de fincas o gestoras.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Funcionalidades principales:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Login, registro y logout de usuarios.
+- Menus dinamicos segun rol: administrador, tecnico, particular y gestora.
+- Gestion de incidencias y asignacion de tecnicos.
+- Calendario de incidencias para administracion.
+- Agenda de trabajo para tecnicos.
+- Panel B2B para gestoras.
+- Gestion de comunidades, zonas y liquidaciones.
+- Calculo de comisiones para gestoras.
+- API JSON `/api/servicios/zonas` con estadisticas por zona.
 
-## Learning Laravel
+## Puesta en marcha local
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Requisitos:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP instalado en local.
+- Composer instalado.
+- Docker Desktop abierto.
+- MySQL levantado mediante `docker compose`.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Pasos habituales:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Instala las dependencias PHP definidas en `composer.lock`.
 
-## Contributing
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Crea el archivo de entorno local y genera la clave de aplicacion Laravel.
 
-## Code of Conduct
+```bash
+docker compose up -d
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Levanta los contenedores necesarios, principalmente MySQL y phpMyAdmin.
 
-## Security Vulnerabilities
+```bash
+php artisan migrate:fresh --seed
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Recrea las tablas desde las migraciones y carga datos de prueba con seeders.
 
-## License
+```bash
+php artisan serve
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Arranca la aplicacion en:
+
+```text
+http://127.0.0.1:8000
+```
+
+phpMyAdmin queda disponible normalmente en:
+
+```text
+http://localhost:8081
+```
+
+## Usuarios de prueba
+
+Todos los usuarios de prueba usan la contrasena `1234`.
+
+| Rol | Email | Contrasena |
+| --- | --- | --- |
+| Administrador | `admin@reparaya.edu` | `1234` |
+| Tecnico | `nfontanero@reparaya.edu` | `1234` |
+| Tecnico | `mcerrajero@reparaya.edu` | `1234` |
+| Tecnico | `pelectricista@reparaya.edu` | `1234` |
+| Particular | `jperez@gmail.com` | `1234` |
+| Particular | `antonia1965@gmail.com` | `1234` |
+| Gestora | `gestora@reparaya.edu` | `1234` |
+
+## Rutas importantes
+
+Rutas web:
+
+```text
+/
+/login
+/registro
+/mis-avisos
+/avisos/nuevo
+/admin
+/admin/calendario
+/admin/incidencias
+/admin/tecnicos
+/admin/gestoras
+/admin/zonas
+/admin/comunidades
+/admin/liquidaciones
+/tecnico/agenda
+/gestora
+/gestora/avisos/nuevo
+/gestora/liquidaciones
+```
+
+Ruta API:
+
+```text
+/api/servicios/zonas
+```
+
+Ejemplo de respuesta:
+
+```json
+{
+  "total_servicios_global": 0,
+  "zonas": [
+    {
+      "nombre_zona": "Centro",
+      "total_servicios": 0,
+      "porcentaje": 0
+    }
+  ]
+}
+```
+
+La API cuenta servicios en estado `Finalizada`. Si los datos de prueba estan en estado `Asignada`, la respuesta puede mostrar todos los totales a cero.
+
+## Estructura Laravel del proyecto
+
+La aplicacion sigue el patron MVC de Laravel:
+
+```text
+Ruta -> Controlador -> Modelo Eloquent -> Base de datos -> Vista Blade
+```
+
+Carpetas principales:
+
+- `routes/web.php`: rutas de la aplicacion web.
+- `routes/api.php`: rutas que devuelven JSON.
+- `app/Http/Controllers`: logica de cada modulo.
+- `app/Http/Middleware`: restricciones de acceso por rol.
+- `app/Models`: modelos Eloquent que representan tablas.
+- `resources/views`: plantillas Blade.
+- `database/migrations`: definicion versionada de las tablas.
+- `database/seeders`: datos iniciales de prueba.
+
+## Controladores principales
+
+- `AuthController`: login, registro y logout.
+- `HomeController`: pagina de inicio y resumen general.
+- `IncidenciaController`: avisos de clientes particulares.
+- `AdminController`: panel administrador, tecnicos, incidencias, calendario, gestoras, zonas, comunidades y liquidaciones.
+- `GestoraPanelController`: panel de gestora, creacion de avisos y consulta de comisiones.
+- `TecnicoPanelController`: agenda del tecnico y finalizacion de servicios.
+- `ZonasController`: endpoint JSON de servicios por zona.
+
+## Modelos principales
+
+- `Usuario`: usuarios autenticables y roles.
+- `Incidencia`: servicios o avisos de reparacion.
+- `Tecnico`: tecnicos asignables.
+- `Especialidad`: tipos de servicio y precios.
+- `Gestora`: empresas administradoras de fincas.
+- `Comunidad`: comunidades gestionadas por gestoras.
+- `Zona`: zonas de la ciudad.
+- `Liquidacion`: estructura prevista para liquidaciones de gestoras.
+
+## Roles y middlewares
+
+El proyecto usa middlewares para proteger zonas de la aplicacion:
+
+- `admin`: restringe rutas de administracion.
+- `tecnico`: restringe la agenda del tecnico.
+- `gestora`: restringe el panel B2B de gestoras.
+
+Estos alias se registran en `bootstrap/app.php` y se aplican en `routes/web.php`.
+
+## Flujo de ejemplo
+
+Panel de gestora:
+
+```text
+/gestora
+```
+
+1. La ruta se define en `routes/web.php`.
+2. Laravel comprueba que el usuario esta autenticado y tiene rol `gestora`.
+3. `GestoraPanelController@dashboard` obtiene la gestora asociada al usuario.
+4. Eloquent carga comunidades, zonas, incidencias, precios y comisiones.
+5. La vista `resources/views/gestora/dashboard.blade.php` muestra el panel.
+
+API por zonas:
+
+```text
+/api/servicios/zonas
+```
+
+1. La ruta se define en `routes/api.php`.
+2. `ZonasController@incidenciasPorZona` calcula servicios finalizados por zona.
+3. Laravel devuelve una respuesta JSON para ser consumida por WordPress en un producto posterior.
+
+## Git y ramas
+
+La rama base de trabajo del Producto 3 es:
+
+```text
+producto3-base
+```
+
+Ramas usadas durante el desarrollo:
+
+- `p3-adrian`: migracion inicial y funcionalidad B2B.
+- `p3-marc`: API REST y rutas API.
+- `Antonio-p3`: correcciones de calendario, gestora, agenda y liquidaciones.
+- `p3-jacobo`: revision, pruebas y documentacion.
+
+Antes de empezar a trabajar conviene actualizar:
+
+```bash
+git fetch --all --prune
+git checkout producto3-base
+git pull origin producto3-base
+git checkout p3-jacobo
+git merge producto3-base
+```
+
+## Comandos utiles
+
+Ver estado de la rama:
+
+```bash
+git status --short --branch
+```
+
+Ver rutas registradas por Laravel:
+
+```bash
+php artisan route:list
+```
+
+Recrear base de datos local:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Arrancar servidor local:
+
+```bash
+php artisan serve
+```
+
+## Notas de revision
+
+- La API `/api/servicios/zonas` responde correctamente, pero necesita servicios en estado `Finalizada` para mostrar porcentajes distintos de cero.
+- Las liquidaciones tambien dependen de incidencias de gestora en estado `Finalizada`.
+- El despliegue final debera comprobar la configuracion de base de datos en AWS y la ruta requerida `dominio.com/producto3`.
