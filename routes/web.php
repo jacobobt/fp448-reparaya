@@ -25,6 +25,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Rutas para clientes particulares
 // ------------------------------------------------------------------
 Route::middleware(['auth'])->group(function () {
+    Route::get('/perfil', [AuthController::class, 'showProfile'])->name('profile.show');
+    Route::patch('/perfil', [AuthController::class, 'updateProfile'])->name('profile.update');
     Route::get('/mis-avisos',           [IncidenciaController::class, 'index'])->name('incidencias.index');
     Route::get('/avisos/nuevo',         [IncidenciaController::class, 'create'])->name('incidencias.create');
     Route::post('/avisos',              [IncidenciaController::class, 'store'])->name('incidencias.store');

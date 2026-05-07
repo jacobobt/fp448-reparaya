@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function showProfile(Request $request)
+    {
+        return view('auth.profile', [
+            'usuario' => $request->user(),
+        ]);
+    }
+
     public function showLogin()
     {
         return view('auth.login');
@@ -67,5 +74,25 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('home');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $usuario = $request->user();
+
+        $datos = $request->validate([
+            'nombre' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'email', 'max:100', 'unique:usuarios,email,' . $usuario->id],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'password' => ['nullable', 'string', 'min:4'],
+        ]);
+
+        if (blank($datos['password'] ?? null)) {
+            unset($datos['password']);
+        }
+
+        $usuario->update($datos);
+
+        return back()->with('success', 'Perfil actualizado correctamente.');
     }
 }

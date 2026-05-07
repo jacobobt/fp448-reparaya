@@ -35,6 +35,7 @@
         <a href="{{ route('home') }}">Inicio</a>
         @auth
             <span>Hola, {{ auth()->user()->nombre }} ({{ auth()->user()->rol }})</span>
+            <a href="{{ route('profile.show') }}">Mi perfil</a>
 
             @if (auth()->user()->rol === 'admin')
                 <a href="{{ route('admin.dashboard') }}">Panel administrador</a>
