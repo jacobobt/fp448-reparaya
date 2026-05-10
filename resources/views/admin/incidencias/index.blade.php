@@ -87,6 +87,7 @@
         <th>Asignar técnico</th>
         <th>Estado</th>
         <th>Cambiar estado</th>
+        <th>Precio final</th>
     </tr>
     </thead>
     <tbody>
@@ -134,9 +135,12 @@
                     <button type="submit" style="font-size:12px; padding:4px 10px;">OK</button>
                 </form>
             </td>
+            <td>
+                {{ number_format($incidencia->precio_final,2) }} €
+            </td>
         </tr>
     @empty
-        <tr><td colspan="9" style="text-align:center; padding:24px; color:#6b7280;">No hay incidencias con los filtros aplicados.</td></tr>
+        <tr><td colspan="10" style="text-align:center; padding:24px; color:#6b7280;">No hay incidencias con los filtros aplicados.</td></tr>
     @endforelse
     </tbody>
 </table>
