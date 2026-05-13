@@ -47,6 +47,9 @@ class IncidenciaController extends Controller
         ]);
 
         $fechaServicio = $datos['fecha_servicio'] . ' ' . substr($datos['franja_horaria'], 0, 5) . ':00';
+        $especialidad = Especialidad::findOrFail($datos['especialidad_id']);
+        $precioFinal = $especialidad->precio;
+
 
         Incidencia::create([
             'localizador'       => $this->servicio->generarLocalizador(),
@@ -60,6 +63,7 @@ class IncidenciaController extends Controller
             'fecha_servicio'    => $fechaServicio,
             'tipo_urgencia'     => $datos['tipo_urgencia'],
             'estado'            => 'Pendiente',
+            'precio_final' => $precioFinal,
         ]);
 
         return redirect()
